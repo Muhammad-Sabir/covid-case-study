@@ -19,6 +19,14 @@ def setup_logging():
     except Exception as e:
         raise Exception(f"Unexpected error while reading logging config: {e}") from e
     
+    # Ensure log directories exist
+    for handler in config.get("handlers", {}).values():
+        filename = handler.get("filename")
+        if filename:
+            log_path = Path(filename)
+            log_dir = log_path.parent
+            log_dir.mkdir(parents=True, exist_ok=True)
+
     try:
         logging.config.dictConfig(config)
     except ValueError as e:
