@@ -3,11 +3,13 @@ import atexit
 import logging.config
 from pathlib import Path
 
+from src.utils.constants import CONFIGS_DIR
+
 def setup_logging():
     """
     Sets up logging configuration for the app.
     """
-    config_file = Path(__file__).resolve().parent.parent.parent / "configs" / "logging_config.json"
+    config_file = CONFIGS_DIR / "logging_config.json"
 
     try:
         with open(config_file, 'r') as file:
