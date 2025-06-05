@@ -11,7 +11,7 @@ from src.utils.constants import OUTPUTS_DIR
 def save_top_countries_confirmed_cases_plot(confirmed_cases_df):
     """
     Takes in the raw dataframe of confirmed cases and cleans it as needed 
-    and save the plot generated in output directory
+    and saves the plot of top 5 countries in output directory
 
     Parameters:
         confirmed_cases_df: df (Pandas DataFrame) of confirmed cases
@@ -49,6 +49,46 @@ def save_top_countries_confirmed_cases_plot(confirmed_cases_df):
         plt.subplots_adjust(bottom=0.14)
         plt.xticks(rotation=15)
         plt.grid(True)
-        plt.savefig(OUTPUTS_DIR / 'top_five_countries.svg')
+        plt.savefig(OUTPUTS_DIR / 'top_five_countries_cases_overtime.svg')
+    except Exception as err:
+        logger.error(f"An unexpected error occured: {err}")
+
+def save_china_countries_confirmed_cases_plot(confirmed_cases_df):
+    """
+    Takes in the raw dataframe of confirmed cases and cleans it as needed 
+    and saves the plot of china's confirmed cases overtime
+
+    Parameters:
+        confirmed_cases_df: df (Pandas DataFrame) of confirmed cases
+    
+    Returns:
+        None
+    """
+    try:
+        # Filter out all of the china regions and group them up and sum their cases
+        china_confirmed_cases = confirmed_cases_df[confirmed_cases_df['Country/Region'] == 'China']
+        grouped_china_confirmed_cases = china_confirmed_cases.groupby('Country/Region').sum()
+
+        # Remove unnecessary columns
+        grouped_china_confirmed_cases.drop(columns=['Province/State', 'Lat', 'Long'], inplace=True)
+
+        # Convert the columns to proper datetime format
+        columns_datetime = pd.to_datetime(grouped_china_confirmed_cases.columns, format='%m/%d/%y')
+        
+        # Customize and plot overtime, and save the figure
+        plt.figure(figsize=(14, 6))
+        plt.plot(columns_datetime, grouped_china_confirmed_cases.iloc[0], label=f"China")
+        plt.title('Confirmed Cases in China Overtime')
+        plt.xlabel('Date')
+        plt.ylabel('Confirmed Cases')
+        plt.gca().xaxis.set_major_locator(mdates.MonthLocator())
+        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+        plt.gca().yaxis.set_major_formatter(ticker.StrMethodFormatter('{x:,.0f}'))
+        plt.legend()
+        plt.tight_layout()
+        plt.subplots_adjust(bottom=0.14)
+        plt.xticks(rotation=15)
+        plt.grid(True)
+        plt.savefig(OUTPUTS_DIR / 'china_confirmed_cases_overtime.svg')
     except Exception as err:
         logger.error(f"An unexpected error occured: {err}")

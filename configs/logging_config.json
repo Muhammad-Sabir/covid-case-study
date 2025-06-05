@@ -4,7 +4,7 @@
   "disable_existing_loggers": false,
   "formatters": {
     "simple": {
-      "format": "[%(levelname)s: - %(module)s - %(filename)s - %(funcName)s - %(lineno)s] %(asctime)s: %(message)s",
+      "format": "[%(levelname)s: - module:%(module)s - file:%(filename)s - func:%(funcName)s - line:%(lineno)s] %(asctime)s: %(message)s",
       "datefmt": "%Y-%m-%dT%H:%M:%S%z"
     },
     "json": {
