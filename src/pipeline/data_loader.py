@@ -15,12 +15,13 @@ def load_data(path):
     """
     try:
         df = pd.read_csv(path)
+
+        logger.info(f"Successfully loaded data for file: {path}")
+        return df
     except FileNotFoundError:
         logger.error(f"The file at {path} was not found")
     except Exception as err:
         logger.error(f"An unexcected error occured while loading {path} file: {err}")
-    else:
-        return df
 
 def get_dataset_info(df):
     """
@@ -39,8 +40,11 @@ def get_dataset_info(df):
         buffer = io.StringIO()
         df.info(buf=buffer)
         info_string = buffer.getvalue()
+
+        logger.info(f"Successfully generated info_string")
+        return info_string
     except Exception as err:
         logger.error(f"An unexpected error occured {err}")
     finally:
-        buffer.close()
-    return info_string
+        if buffer is not None:
+            buffer.close()
