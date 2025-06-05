@@ -11,7 +11,8 @@ def load_data(path):
     Returns:
         df: Dataframe of the loaded csv
     """
-    return pd.read_csv(path)
+    df = pd.read_csv(path)
+    return df
 
 def get_dataset_info(df):
     """

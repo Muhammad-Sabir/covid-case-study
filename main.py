@@ -1,16 +1,13 @@
 from pathlib import Path
 
-from utils.utils import setup_logging
-from src.data_loader import load_data, get_dataset_info
-
-# logger = logging.getLogger()
+from src.pipeline.data_loader import load_data, get_dataset_info
+from src.logger.logger import logger
 
 def main():
     BASE_DIR = Path(__file__).resolve().parent
     DATASET_DIR = BASE_DIR / "dataset"
 
-    setup_logging()
-
+    logger.debug("HELLO")
     # Question 1
     deaths_raw = load_data(DATASET_DIR / "covid_19_deaths_v1.csv")
     confirmed_cases_raw = load_data(DATASET_DIR / "covid_19_confirmed_v1.csv")

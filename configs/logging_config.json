@@ -8,7 +8,7 @@
       "datefmt": "%Y-%m-%dT%H:%M:%S%z"
     },
     "json": {
-      "()": "src.custom_logger.CustomJSONFormatter",
+      "()": "src.logger.custom_logger.CustomJSONFormatter",
       "fmt_keys": {
         "level": "levelname",
         "message": "message",

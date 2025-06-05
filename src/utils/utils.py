@@ -7,7 +7,7 @@ def setup_logging():
     """
     Sets up logging configuration for the app.
     """
-    config_file = Path(__file__).resolve().parent.parent / "configs" / "logging_config.json"
+    config_file = Path(__file__).resolve().parent.parent.parent / "configs" / "logging_config.json"
 
     try:
         with open(config_file, 'r') as file:
