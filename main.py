@@ -2,6 +2,7 @@ from src.pipeline.data_loader import load_data, get_dataset_info
 from src.pipeline.visualizer import (
     save_top_countries_confirmed_cases_plot, save_china_countries_confirmed_cases_plot
 )
+from src.pipeline.data_cleaner import handle_deaths_missing_data, handle_confirmed_cases_missing_data, handle_recovered_missing_data
 from src.logger.logger import logger
 from src.utils.constants import DATASET_DIR
 
@@ -22,41 +23,23 @@ def main():
     # print(get_dataset_info(recovered_raw))
 
     # Q2.2
-    save_top_countries_confirmed_cases_plot(confirmed_cases_raw)
+    # save_top_countries_confirmed_cases_plot(confirmed_cases_raw)
 
     # Q 2.3
-    save_china_countries_confirmed_cases_plot(confirmed_cases_raw)
+    # save_china_countries_confirmed_cases_plot(confirmed_cases_raw)
     
-    """DONE"""
-
-
+    
     # Q. 3 - 4
-    # remained_deaths_columns = deaths_df.rename(columns=deaths_df.iloc[0])
-    # print("\n")
-    # remained_deaths_columns = remained_deaths_columns.drop(remained_deaths_columns.index[0]).reset_index(drop=True)
-    # print("remained_deaths_columns: \n", remained_deaths_columns.tail(60))
-    # remained_deaths_columns.info()
-    # print(remained_deaths_columns.isnull().sum(c))
-    # print(remained_deaths_columns.isna().sum())
-    # print(remained_deaths_columns.isna().sum()[remained_deaths_columns.isna().sum() > 0].index.tolist())
-    # remained_deaths_columns["Province/State"].fillna("All Provinces", inplace=True)
-    # print(remained_deaths_columns.shape)
-    # remained_deaths_columns.dropna(inplace=True, subset=["Lat", "Lat"])
-    # remained_deaths_columns.ffill(inplace=True, axis=1)
-    # print(remained_deaths_columns[['4/17/20', '4/18/20', '4/19/20', '4/20/20', '4/21/20', '4/22/20', '4/23/20']].head())
-    # print(remained_deaths_columns.isna().sum()[remained_deaths_columns.isna().sum() > 0].index.tolist())
-    # print(remained_deaths_columns.shape)
-    # print(remained_deaths_columns.isna().sum())
-    # print(remained_deaths_columns.isna().sum())
-    # print(remained_deaths_columns[50: 100])
-    # print(deaths_df.head())
-    # print(deaths_df.tail())
-    # print(confirmed_deaths_df.head())
-    # print("\n")
-    # print(recovered_df.head())
+    deaths_cleaned = handle_deaths_missing_data(deaths_raw)
+    confirmed_cases_cleaned = handle_confirmed_cases_missing_data(confirmed_cases_raw)
+    recovered_cleaned = handle_recovered_missing_data(recovered_raw)
+    # print(deaths_cleaned)
+    # print(confirmed_cases_cleaned)
+    # print(recovered_cleaned)
 
-    # Q4
-    # remained_deaths_columns.fillna({"Province/State": "All Provinces"}, inplace=True)
+    """DONE"""
+    
+
 
 if __name__ == "__main__":
     main()
