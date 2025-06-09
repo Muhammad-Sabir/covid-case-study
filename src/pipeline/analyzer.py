@@ -182,14 +182,14 @@ def merged_monthly_sum(merged_df):
     try:
         merged_df.sort_values(by=['Country/Region', 'Date'], inplace=True)
 
-        merged_df['New Confirmed'] = merged_df.groupby('Country/Region')['Confirmed Cases'].diff()
-        merged_df['New Deaths'] = merged_df.groupby('Country/Region')['Deaths'].diff()
-        merged_df['New Recovered'] = merged_df.groupby('Country/Region')['Recovered'].diff()
+        merged_df['Monthly Confirmed Cases'] = merged_df.groupby('Country/Region')['Confirmed Cases'].diff()
+        merged_df['Monthly Deaths'] = merged_df.groupby('Country/Region')['Deaths'].diff()
+        merged_df['Monthly Recovered'] = merged_df.groupby('Country/Region')['Recovered'].diff()
 
         merged_df['Month'] = merged_df['Date'].dt.to_period('M')
         
         monthly_sum = merged_df.groupby(['Country/Region', 'Month'])[
-            ['New Confirmed', 'New Deaths', 'New Recovered']
+            ['Monthly Confirmed Cases', 'Monthly Deaths', 'Monthly Recovered']
         ].sum().reset_index()
 
         return monthly_sum
