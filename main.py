@@ -2,10 +2,12 @@ from src.pipeline.data_loader import load_data, get_dataset_info
 from src.pipeline.visualizer import (
     save_top_countries_confirmed_cases_plot, save_china_countries_confirmed_cases_plot
 )
-from src.pipeline.data_cleaner import handle_missing_data, transform_from_wide_to_long
+from src.pipeline.data_cleaner import (
+    handle_missing_data, transform_from_wide_to_long, merge_datasets
+)
 from src.pipeline.analyzer import (
     peak_daily_cases_by_country, compare_recovery_rate, distribution_of_death_rates,
-    get_total_deaths_per_country, get_highest_avg_daily_deaths
+    get_total_deaths_per_country, get_highest_avg_daily_deaths, total_deaths_overtime
 )
 from src.utils.constants import DATASET_DIR
 from src.utils.enums import DatasetType
@@ -34,15 +36,15 @@ def main():
     
     
     # Q3 - 4
-    deaths_cleaned = handle_missing_data(deaths_raw, DatasetType.DEATHS)
     confirmed_cases_cleaned = handle_missing_data(confirmed_cases_raw, DatasetType.CONFIRMED_CASES)
+    deaths_cleaned = handle_missing_data(deaths_raw, DatasetType.DEATHS)
     recovered_cleaned = handle_missing_data(recovered_raw, DatasetType.RECOVERED)
-    # print(deaths_cleaned)
     # print(confirmed_cases_cleaned)
+    # print(deaths_cleaned)
     # print(recovered_cleaned)
-    # columns_with_na = deaths_cleaned.columns[deaths_cleaned.isnull().any()].tolist()
-    # print(columns_with_na)
     # columns_with_na = confirmed_cases_cleaned.columns[confirmed_cases_cleaned.isnull().any()].tolist()
+    # print(columns_with_na)
+    # columns_with_na = deaths_cleaned.columns[deaths_cleaned.isnull().any()].tolist()
     # print(columns_with_na)
     # columns_with_na = recovered_cleaned.columns[recovered_cleaned.isnull().any()].tolist()
     # print(columns_with_na)
@@ -86,7 +88,18 @@ def main():
     # Q6.3
     # highest_avg_daily_deaths = get_highest_avg_daily_deaths(deaths_cleaned, 5)
     # print(highest_avg_daily_deaths)
+
+    # Q6.4
+    # deaths_overtime = total_deaths_overtime(deaths_cleaned, 'US')
+    # print(deaths_overtime)
+
     """DONE"""
+    merged_df = merge_datasets(
+        deaths_cleaned=deaths_cleaned,
+        confirmed_cases_cleaned=confirmed_cases_cleaned,
+        recovered_cleaned=recovered_cleaned
+    )
+    print(merged_df)
 
 
 if __name__ == "__main__":
