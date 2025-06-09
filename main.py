@@ -82,11 +82,12 @@ def main():
     # Q6.2
     # total_deaths_per_country = get_total_deaths_per_country(deaths_cleaned)
     # print(total_deaths_per_country)
-    """DONE"""
 
     # Q6.3
-    highest_avg_daily_deaths = get_highest_avg_daily_deaths(deaths_cleaned)
-    print(highest_avg_daily_deaths)
+    # highest_avg_daily_deaths = get_highest_avg_daily_deaths(deaths_cleaned, 5)
+    # print(highest_avg_daily_deaths)
+    """DONE"""
+
 
 if __name__ == "__main__":
     main()

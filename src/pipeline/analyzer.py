@@ -113,13 +113,14 @@ def get_total_deaths_per_country(deaths_cleaned):
     except Exception as err:
         logger.error(f"An unexpected error occured: {str(err)}", exc_info=True)
 
-def get_highest_avg_daily_deaths(deaths_cleaned):
+def get_highest_avg_daily_deaths(deaths_cleaned, number_of_countries):
     """
     Takes in cleaned deaths dataframe, and returns a dataframe of top 5 countries with 
     highest average daily deaths
 
     Parameters:
         deaths_cleaned: Cleaned DataFrame of death cases
+        number_of_countries: Integer number of countries you want
     
     Returns:
         highest_deaths: A DataFrame with highest average daily deaths countries
@@ -133,6 +134,8 @@ def get_highest_avg_daily_deaths(deaths_cleaned):
         # Add total deaths column
         average_daily_deaths = deaths_cleaned.mean(axis=1, numeric_only=True).round(2)
         highest_deaths = deaths_cleaned.assign(**{"Average Daily Deaths": average_daily_deaths}).copy()
+
+        highest_deaths = highest_deaths.sort_values("Average Daily Deaths", ascending=False).head(number_of_countries)
         
         return highest_deaths
     except Exception as err:
