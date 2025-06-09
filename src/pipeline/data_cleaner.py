@@ -117,7 +117,38 @@ def transform_from_wide_to_long(wide_df, data_type):
             value_column_title = 'Recovered'
         
         long_df = pd.melt(wide_df, id_vars=['Province/State', 'Country/Region', 'Lat', 'Long'], var_name='Date', value_name=value_column_title)
-
+        long_df['Date'] = pd.to_datetime(long_df['Date'], format='%m/%d/%y')
+        
         return long_df
+    except Exception as err:
+        logger.error(f"An unexpected error occurred {str(err)}", exc_info=True)
+
+def merge_datasets(deaths_cleaned, confirmed_cases_cleaned, recovered_cleaned):
+    """
+    Takes in any clean dataframes of deaths, confirmed, and recovered cases
+    and converts the datasets from wide to long format and merge them
+
+    Parameters:
+        deaths_cleaned: Deaths DataFrame in wide format
+        confirmed_cases_cleaned: Confirmed Cases DataFrame in wide format
+        recovered_cleaned: Recovered Cases DataFrame in wide format
+    
+    Returns:
+        merged_df: DataFrame built by merging them
+    """
+    try:
+        
+        confirmed_cases_long = transform_from_wide_to_long(confirmed_cases_cleaned, DatasetType.CONFIRMED_CASES)
+        deaths_long = transform_from_wide_to_long(deaths_cleaned, DatasetType.DEATHS)
+        recovered_long = transform_from_wide_to_long(recovered_cleaned, DatasetType.RECOVERED)
+
+        confirmed_cases_grouped = confirmed_cases_long.groupby(['Country/Region', 'Date'])['Confirmed Cases'].sum().reset_index()
+        deaths_grouped = deaths_long.groupby(['Country/Region', 'Date'])['Deaths'].sum().reset_index()
+        recovered_grouped = recovered_long.groupby(['Country/Region', 'Date'])['Recovered'].sum().reset_index()
+
+        merged_df = confirmed_cases_grouped.merge(deaths_grouped, on=['Country/Region', 'Date'])
+        merged_df = merged_df.merge(recovered_grouped, on=['Country/Region', 'Date'])
+
+        return merged_df
     except Exception as err:
         logger.error(f"An unexpected error occurred {str(err)}", exc_info=True)
