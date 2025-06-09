@@ -167,3 +167,31 @@ def total_deaths_overtime(deaths_cleaned, country_name):
         return overtime_deaths
     except Exception as err:
         logger.error(f"An unexpected error occured: {str(err)}", exc_info=True)
+
+def merged_monthly_sum(merged_df):
+    """
+    Takes in merged dataframe of confirmed, deaths, and recovered cases, and returns
+    a dataframe containing monthly sum of each dataset type.
+
+    Parameters:
+        merged_df: Merged DataFrame of confirmed, deaths, recovered cases in long format
+    
+    Returns:
+        monthly_sum: A DataFrame with merged monthly sums
+    """
+    try:
+        merged_df.sort_values(by=['Country/Region', 'Date'], inplace=True)
+
+        merged_df['New Confirmed'] = merged_df.groupby('Country/Region')['Confirmed Cases'].diff()
+        merged_df['New Deaths'] = merged_df.groupby('Country/Region')['Deaths'].diff()
+        merged_df['New Recovered'] = merged_df.groupby('Country/Region')['Recovered'].diff()
+
+        merged_df['Month'] = merged_df['Date'].dt.to_period('M')
+        
+        monthly_sum = merged_df.groupby(['Country/Region', 'Month'])[
+            ['New Confirmed', 'New Deaths', 'New Recovered']
+        ].sum().reset_index()
+
+        return monthly_sum
+    except Exception as err:
+        logger.error(f"An unexpected error occured: {str(err)}", exc_info=True)

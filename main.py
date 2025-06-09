@@ -7,7 +7,8 @@ from src.pipeline.data_cleaner import (
 )
 from src.pipeline.analyzer import (
     peak_daily_cases_by_country, compare_recovery_rate, distribution_of_death_rates,
-    get_total_deaths_per_country, get_highest_avg_daily_deaths, total_deaths_overtime
+    get_total_deaths_per_country, get_highest_avg_daily_deaths, total_deaths_overtime,
+    merged_monthly_sum
 )
 from src.utils.constants import DATASET_DIR
 from src.utils.enums import DatasetType
@@ -93,13 +94,21 @@ def main():
     # deaths_overtime = total_deaths_overtime(deaths_cleaned, 'US')
     # print(deaths_overtime)
 
-    """DONE"""
+    # Q7.1
     merged_df = merge_datasets(
         deaths_cleaned=deaths_cleaned,
         confirmed_cases_cleaned=confirmed_cases_cleaned,
         recovered_cleaned=recovered_cleaned
     )
-    print(merged_df)
+    # print(merged_df)
+
+    # Q7.2
+    monthly_sum = merged_monthly_sum(merged_df)
+    # print(monthly_sum)
+    # columns_with_na = monthly_sum.columns[monthly_sum.isnull().any()].tolist()
+    # print(columns_with_na)
+    
+    """DONE"""
 
 
 if __name__ == "__main__":
