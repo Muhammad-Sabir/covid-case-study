@@ -96,22 +96,28 @@ def handle_missing_data(raw_df, data_type):
     except Exception as err:
         logger.error(f"An unexpected error occurred {str(err)}", exc_info=True)
 
-# def transform_from_wide_to_long(wide_df):
-#     """
-#     Takes in any clean dataframe and converts the dataset from wide to
-#     long format
+def transform_from_wide_to_long(wide_df, data_type):
+    """
+    Takes in any clean dataframe and converts the dataset from wide to
+    long format
 
-#     Parameters:
-#         wide_df: DataFrame in wide format
+    Parameters:
+        wide_df: DataFrame in wide format
+        data_type: DatasetType enum value
     
-#     Returns:
-#         long_df: DataFrame in long format
-#     """
-#     try:
-#         variable_column_title = ''
-#         value_column_title = ''
-#         long_df = pd.melt(wide_df, id_vars=[], )
+    Returns:
+        long_df: DataFrame in long format
+    """
+    try:
+        if data_type == DatasetType.DEATHS:
+            value_column_title = 'Deaths'
+        elif data_type == DatasetType.CONFIRMED_CASES:
+            value_column_title = 'Confirmed Cases'
+        elif data_type == DatasetType.RECOVERED:
+            value_column_title = 'Recovered'
+        
+        long_df = pd.melt(wide_df, id_vars=['Province/State', 'Country/Region', 'Lat', 'Long'], var_name='Date', value_name=value_column_title)
 
-#         return long_df
-#     except Exception as err:
-#         logger.error(f"An unexpected error occurred {str(err)}", exc_info=True)
+        return long_df
+    except Exception as err:
+        logger.error(f"An unexpected error occurred {str(err)}", exc_info=True)
