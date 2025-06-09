@@ -2,8 +2,11 @@ from src.pipeline.data_loader import load_data, get_dataset_info
 from src.pipeline.visualizer import (
     save_top_countries_confirmed_cases_plot, save_china_countries_confirmed_cases_plot
 )
-from src.pipeline.data_cleaner import handle_missing_data
-from src.pipeline.analyzer import peak_daily_cases_by_country, compare_recovery_rate, distribution_of_death_rates
+from src.pipeline.data_cleaner import handle_missing_data, transform_from_wide_to_long
+from src.pipeline.analyzer import (
+    peak_daily_cases_by_country, compare_recovery_rate, distribution_of_death_rates,
+    get_total_deaths_per_country
+)
 from src.utils.constants import DATASET_DIR
 from src.utils.enums import DatasetType
 
@@ -72,9 +75,17 @@ def main():
     # TODO: Plot above
     # TODO: Provide Insights
 
-    """DONE"""
     # Q6.1
+    # long_deaths_df = transform_from_wide_to_long(deaths_cleaned, DatasetType.DEATHS)
+    # print(long_deaths_df)
 
+    # Q6.2
+    # total_deaths_per_country = get_total_deaths_per_country(deaths_cleaned)
+    # print(total_deaths_per_country)
+    """DONE"""
+
+    # Q6.3
+    
 
 if __name__ == "__main__":
     main()
