@@ -1,6 +1,7 @@
 import pandas as pd
 
 from src.logger.logger import logger
+from src.utils.enums import DatasetType
 
 def rename_column_first_row(raw_df):
     """
@@ -64,81 +65,53 @@ def fix_datatypes(raw_df):
 
     return datatype_fixed_df
 
-def handle_deaths_missing_data(deaths_raw):
+def handle_missing_data(raw_df, data_type):
     """
-    Takes in raw dataframe of the deaths and handle the missing values
-    in the columns, deletes lat/long non-significant rows and ffill 
-    the deaths from left to right, and whereever province is empty,
-    write 'All Provinces'
+    Takes in raw dataframe and handle the missing values in the columns, 
+    deletes lat/long non-significant rows and ffill from left to right,
+    and whereever province is empty, write 'All Provinces'
 
     Parameters:
-        deaths_raw: Raw DataFrame of the deaths csv
+        raw_df: Raw DataFrame of the deaths csv
+        data_type: DatasetType enum value
     
     Returns:
-        deaths_cleaned: Cleaned DataFrame of the deaths csv
+        cleaned_df: Cleaned DataFrame
     """
     try:
-        deaths_renamed = rename_column_first_row(deaths_raw)
-        deaths_cleaned = replace_empty_province(deaths_renamed)
-        deaths_cleaned = drop_non_existing_provinces(deaths_cleaned)
+        if data_type in [DatasetType.DEATHS, DatasetType.RECOVERED]:
+            raw_df = rename_column_first_row(raw_df)
+
+        cleaned_df = replace_empty_province(raw_df)
+        cleaned_df = drop_non_existing_provinces(cleaned_df)
         
         # Drop rows where Lat or Long are NaN, these rows are non-significant
-        deaths_cleaned.dropna(inplace=True, subset=['Lat', 'Long'])
+        cleaned_df.dropna(inplace=True, subset=['Lat', 'Long'])
 
-        # Fill missing death values left to right
-        deaths_cleaned = deaths_cleaned.ffill(axis=1)
-        
-        return fix_datatypes(deaths_cleaned)
+        # Fill missing values left to right
+        cleaned_df = cleaned_df.ffill(axis=1)
+
+        cleaned_df = drop_non_existing_provinces(cleaned_df)
+        return fix_datatypes(cleaned_df)
     except Exception as err:
         logger.error(f"An unexpected error occurred {str(err)}", exc_info=True)
 
-def handle_confirmed_cases_missing_data(confirmed_cases_raw):
-    """
-    Takes in raw dataframe of the confirmed_cases and handle the missing values
-    in the columns, deletes lat/long non-significant rows and whereever province
-    is empty, write 'All Provinces'
+# def transform_from_wide_to_long(wide_df):
+#     """
+#     Takes in any clean dataframe and converts the dataset from wide to
+#     long format
 
-    Parameters:
-        confirmed_cases_raw: Raw DataFrame of the deaths csv
+#     Parameters:
+#         wide_df: DataFrame in wide format
     
-    Returns:
-        confirmed_cases_cleaned: Cleaned DataFrame of the confirmed_cases csv
-    """
-    try:
-        confirmed_cases_raw = replace_empty_province(confirmed_cases_raw)
-        confirmed_cases_raw = drop_non_existing_provinces(confirmed_cases_raw)
-        
-        # Drop rows where Lat or Long are NaN, these rows are non-significant
-        confirmed_cases_cleaned = confirmed_cases_raw.dropna(subset=['Lat', 'Long'])
+#     Returns:
+#         long_df: DataFrame in long format
+#     """
+#     try:
+#         variable_column_title = ''
+#         value_column_title = ''
+#         long_df = pd.melt(wide_df, id_vars=[], )
 
-        return fix_datatypes(confirmed_cases_cleaned)
-    except Exception as err:
-        logger.error(f"An unexpected error occurred {str(err)}", exc_info=True)
-
-def handle_recovered_missing_data(recovered_raw):
-    """
-    Takes in raw dataframe of the recovered cases and handle the missing
-    values in the columns, deletes lat/long non-significant rows and ffill 
-    the cases from left to right, and whereever province is empty,
-    write 'All Provinces'
-
-    Parameters:
-        recovered_raw: Raw DataFrame of the recovered csv
-    
-    Returns:
-        recovered_cleaned: Cleaned DataFrame of the recovered cases csv
-    """
-    try:
-        recovered_renamed = rename_column_first_row(recovered_raw)
-        recovered_cleaned = replace_empty_province(recovered_renamed)
-        recovered_cleaned = drop_non_existing_provinces(recovered_cleaned)
-        
-        # Drop rows where Lat or Long are NaN, these rows are non-significant
-        recovered_cleaned.dropna(inplace=True, subset=['Lat', 'Long'])
-
-        # Fill missing death values left to right
-        recovered_cleaned = recovered_cleaned.ffill(axis=1)
-
-        return fix_datatypes(recovered_cleaned)
-    except Exception as err:
-        logger.error(f"An unexpected error occurred {str(err)}", exc_info=True)
+#         return long_df
+#     except Exception as err:
+#         logger.error(f"An unexpected error occurred {str(err)}", exc_info=True)

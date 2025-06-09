@@ -2,10 +2,10 @@ from src.pipeline.data_loader import load_data, get_dataset_info
 from src.pipeline.visualizer import (
     save_top_countries_confirmed_cases_plot, save_china_countries_confirmed_cases_plot
 )
-from src.pipeline.data_cleaner import handle_deaths_missing_data, handle_confirmed_cases_missing_data, handle_recovered_missing_data
+from src.pipeline.data_cleaner import handle_missing_data
 from src.pipeline.analyzer import peak_daily_cases_by_country, compare_recovery_rate, distribution_of_death_rates
-from src.logger.logger import logger
 from src.utils.constants import DATASET_DIR
+from src.utils.enums import DatasetType
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -31,12 +31,18 @@ def main():
     
     
     # Q3 - 4
-    deaths_cleaned = handle_deaths_missing_data(deaths_raw)
-    confirmed_cases_cleaned = handle_confirmed_cases_missing_data(confirmed_cases_raw)
-    recovered_cleaned = handle_recovered_missing_data(recovered_raw)
+    deaths_cleaned = handle_missing_data(deaths_raw, DatasetType.DEATHS)
+    confirmed_cases_cleaned = handle_missing_data(confirmed_cases_raw, DatasetType.CONFIRMED_CASES)
+    recovered_cleaned = handle_missing_data(recovered_raw, DatasetType.RECOVERED)
     # print(deaths_cleaned)
     # print(confirmed_cases_cleaned)
     # print(recovered_cleaned)
+    # columns_with_na = deaths_cleaned.columns[deaths_cleaned.isnull().any()].tolist()
+    # print(columns_with_na)
+    # columns_with_na = confirmed_cases_cleaned.columns[confirmed_cases_cleaned.isnull().any()].tolist()
+    # print(columns_with_na)
+    # columns_with_na = recovered_cleaned.columns[recovered_cleaned.isnull().any()].tolist()
+    # print(columns_with_na)
 
     # Q5.1
     # peak_daily_cases = peak_daily_cases_by_country(confirmed_cases_cleaned, ['Germany', 'France', 'Italy'])
