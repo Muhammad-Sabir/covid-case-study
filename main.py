@@ -108,6 +108,12 @@ def main():
     # columns_with_na = monthly_sum.columns[monthly_sum.isnull().any()].tolist()
     # print(columns_with_na)
     
+    # Q7.3
+    # countries = ['US', 'Italy', 'Brazil']
+    # filtered_monthly_sum = monthly_sum[monthly_sum['Country/Region'].isin(countries)]
+    # print(filtered_monthly_sum)
+    # columns_with_na = monthly_sum.columns[monthly_sum.isnull().any()].tolist()
+    # print(columns_with_na)
     """DONE"""
 
 
