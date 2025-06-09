@@ -8,7 +8,8 @@ from src.pipeline.data_cleaner import (
 from src.pipeline.analyzer import (
     peak_daily_cases_by_country, compare_recovery_rate, distribution_of_death_rates,
     get_total_deaths_per_country, get_highest_avg_daily_deaths, total_deaths_overtime,
-    merged_monthly_sum
+    merged_monthly_sum, highest_avg_death_rates_2020, recovery_death_ratio,
+    highest_recovery_confirmed_ratio
 )
 from src.utils.constants import DATASET_DIR
 from src.utils.enums import DatasetType
@@ -114,6 +115,19 @@ def main():
     # print(filtered_monthly_sum)
     # columns_with_na = monthly_sum.columns[monthly_sum.isnull().any()].tolist()
     # print(columns_with_na)
+
+    # Q8.1
+    top_3_avg = highest_avg_death_rates_2020(merged_df, 3)
+    # print(top_3_avg)
+
+    # Q8.2
+    sa_ratio = recovery_death_ratio(merged_df, 'South Africa')
+    # print(sa_ratio)
+
+    # Q8.3
+    us_ratio = highest_recovery_confirmed_ratio(merged_df, 'US')
+    print(us_ratio)
+    
     """DONE"""
 
 

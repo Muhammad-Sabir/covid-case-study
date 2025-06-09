@@ -195,3 +195,79 @@ def merged_monthly_sum(merged_df):
         return monthly_sum
     except Exception as err:
         logger.error(f"An unexpected error occured: {str(err)}", exc_info=True)
+
+def highest_avg_death_rates_2020(merged_df, number_of_countries=3):
+    """
+    Takes in merged dataframe of confirmed, deaths, and recovered cases, and number_of_countries
+    and returns a dataframe death rates of top n countries.
+
+    Parameters:
+        merged_df: Merged DataFrame of confirmed, deaths, recovered cases in long format
+        number_of_countries: Number of countries of which you want to see death rates
+    
+    Returns:
+        death_rates: A DataFrame with death rates of n countries
+    """
+    try:
+        df_2020 = merged_df[(merged_df['Date'] >= '2020-01-01') & (merged_df['Date'] <= '2020-12-31')]
+        
+        death_rates = df_2020.sort_values('Date').groupby('Country/Region').last().reset_index()
+
+        death_rates['Death Rate'] = (death_rates['Deaths'] / death_rates['Confirmed Cases']).fillna(0.0).round(2)
+        death_rates = death_rates.sort_values('Death Rate', ascending=False).head(number_of_countries)
+
+        return death_rates
+    except Exception as err:
+        logger.error(f"An unexpected error occured: {str(err)}", exc_info=True)
+
+def recovery_death_ratio(merged_df, country_name):
+    """
+    Takes in merged dataframe of confirmed, deaths, and recovered cases, and name of the country
+    and returns a recovery death ratio of that country.
+
+    Parameters:
+        merged_df: Merged DataFrame of confirmed, deaths, recovered cases in long format
+        country_name: Name of country of which you want to see recovery death ratio
+    
+    Returns:
+        recovery_death_ratio: Recovery death ratio of specified country
+    """
+    try:
+        country_df = merged_df[merged_df['Country/Region'] == country_name]
+        
+        latest_data = country_df.sort_values('Date').iloc[-1]
+
+        total_recovered = latest_data['Recovered']
+        total_deaths = latest_data['Deaths']
+
+        recovery_death_ratio = total_recovered / total_deaths if total_deaths > 0 else None
+
+        return recovery_death_ratio.round(2) if isinstance(recovery_death_ratio, float) else recovery_death_ratio
+    except Exception as err:
+        logger.error(f"An unexpected error occured: {str(err)}", exc_info=True)
+
+def highest_recovery_confirmed_ratio(merged_df, country_name):
+    """
+    Takes in merged dataframe of confirmed, deaths, and recovered cases, and name of the country
+    and returns a recovery confirmed cases ratio of that country.
+
+    Parameters:
+        merged_df: Merged DataFrame of confirmed, deaths, recovered cases in long format
+        country_name: Name of country of which you want to see recovery confirm cases
+    
+    Returns:
+        recovery_confirm_ratio: Recovery confirm cases ratio of specified country
+    """
+    try:
+        country_df = merged_df[merged_df['Country/Region'] == country_name]
+        
+        date_filtered = country_df[(country_df['Date'] >= '2020-03-01') & (country_df['Date'] <= '2021-05-31')].copy()
+        date_filtered['Month'] = date_filtered['Date'].dt.to_period('M')
+        recovery_confirm_ratio = date_filtered.sort_values('Date').groupby('Month').last().reset_index()
+
+        recovery_confirm_ratio['Recovery Ratio'] = (recovery_confirm_ratio['Recovered'] / recovery_confirm_ratio['Confirmed Cases']).round(2)
+        recovery_confirm_ratio = recovery_confirm_ratio.sort_values('Recovery Ratio', ascending=False)
+
+        return recovery_confirm_ratio
+    except Exception as err:
+        logger.error(f"An unexpected error occured: {str(err)}", exc_info=True)
