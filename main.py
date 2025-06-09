@@ -5,7 +5,7 @@ from src.pipeline.visualizer import (
 from src.pipeline.data_cleaner import handle_missing_data, transform_from_wide_to_long
 from src.pipeline.analyzer import (
     peak_daily_cases_by_country, compare_recovery_rate, distribution_of_death_rates,
-    get_total_deaths_per_country
+    get_total_deaths_per_country, get_highest_avg_daily_deaths
 )
 from src.utils.constants import DATASET_DIR
 from src.utils.enums import DatasetType
@@ -85,7 +85,8 @@ def main():
     """DONE"""
 
     # Q6.3
-    
+    highest_avg_daily_deaths = get_highest_avg_daily_deaths(deaths_cleaned)
+    print(highest_avg_daily_deaths)
 
 if __name__ == "__main__":
     main()

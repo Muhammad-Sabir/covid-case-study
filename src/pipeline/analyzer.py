@@ -92,7 +92,7 @@ def distribution_of_death_rates(deaths_cleaned, confirmed_cases_cleaned, country
 
 def get_total_deaths_per_country(deaths_cleaned):
     """
-    Takes in cleaned deaths dataframe, and returns a dataframe of with 
+    Takes in cleaned deaths dataframe, and returns a dataframe with 
     total deaths per country
 
     Parameters:
@@ -107,8 +107,33 @@ def get_total_deaths_per_country(deaths_cleaned):
         
         # Add total deaths column
         total_deaths = deaths_cleaned.sum(axis=1, numeric_only=True)
-        total_deaths_df = deaths_cleaned.assign(total_deaths=total_deaths).copy()
+        total_deaths_df = deaths_cleaned.assign(**{"Total Deaths": total_deaths}).copy()
         
         return total_deaths_df
+    except Exception as err:
+        logger.error(f"An unexpected error occured: {str(err)}", exc_info=True)
+
+def get_highest_avg_daily_deaths(deaths_cleaned):
+    """
+    Takes in cleaned deaths dataframe, and returns a dataframe of top 5 countries with 
+    highest average daily deaths
+
+    Parameters:
+        deaths_cleaned: Cleaned DataFrame of death cases
+    
+    Returns:
+        highest_deaths: A DataFrame with highest average daily deaths countries
+    """
+    try:
+        # Drop unnecessary columns
+        deaths_cleaned = deaths_cleaned.drop(columns=['Lat', 'Long', 'Province/State'])
+
+        deaths_cleaned = deaths_cleaned.groupby('Country/Region').sum().reset_index()
+        
+        # Add total deaths column
+        average_daily_deaths = deaths_cleaned.mean(axis=1, numeric_only=True).round(2)
+        highest_deaths = deaths_cleaned.assign(**{"Average Daily Deaths": average_daily_deaths}).copy()
+        
+        return highest_deaths
     except Exception as err:
         logger.error(f"An unexpected error occured: {str(err)}", exc_info=True)
