@@ -140,3 +140,30 @@ def get_highest_avg_daily_deaths(deaths_cleaned, number_of_countries):
         return highest_deaths
     except Exception as err:
         logger.error(f"An unexpected error occured: {str(err)}", exc_info=True)
+
+def total_deaths_overtime(deaths_cleaned, country_name):
+    """
+    Takes in cleaned deaths dataframe, and returns a dataframe of deaths
+    overtime.
+
+    Parameters:
+        deaths_cleaned: Cleaned DataFrame of death cases
+        country_name: Name of the country you want the overtime deaths for
+    
+    Returns:
+        overtime_deaths: A DataFrame with overtime deaths of the specified country
+    """
+    try:
+        overtime_deaths = deaths_cleaned[deaths_cleaned['Country/Region'] == country_name]
+
+        # Drop unnecessary columns
+        overtime_deaths = overtime_deaths.groupby('Country/Region').sum()
+        overtime_deaths = overtime_deaths.drop(columns=['Lat', 'Long', 'Province/State'])
+
+        overtime_deaths = overtime_deaths.T
+        overtime_deaths.index = pd.to_datetime(overtime_deaths.index, format='%m/%d/%y')
+        overtime_deaths.columns = ['Total_Deaths']
+        
+        return overtime_deaths
+    except Exception as err:
+        logger.error(f"An unexpected error occured: {str(err)}", exc_info=True)
