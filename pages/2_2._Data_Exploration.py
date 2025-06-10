@@ -9,6 +9,10 @@ from src.pipeline.visualizer import (
     get_china_countries_confirmed_cases_plot,
 )
 
+confirmed_cases_raw = load_data(DATASET_DIR / "covid_19_confirmed_v1.csv")
+deaths_raw = load_data(DATASET_DIR / "covid_19_deaths_v1.csv")
+recovered_raw = load_data(DATASET_DIR / "covid_19_recovered_v1.csv")
+
 st.set_page_config(layout="wide")
 
 st.title("Data Exploration")
@@ -16,10 +20,6 @@ st.caption("Explore the structure and trends in the COVID-19 dataset.")
 
 # Question 2.1
 st.markdown("**Q2.1**: Examine structure — rows, columns, data types.")
-
-confirmed_cases_raw = load_data(DATASET_DIR / "covid_19_confirmed_v1.csv")
-deaths_raw = load_data(DATASET_DIR / "covid_19_deaths_v1.csv")
-recovered_raw = load_data(DATASET_DIR / "covid_19_recovered_v1.csv")
 
 confirmed_info = get_dataset_info(confirmed_cases_raw)
 deaths_info = get_dataset_info(deaths_raw)

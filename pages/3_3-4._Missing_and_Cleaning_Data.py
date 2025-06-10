@@ -17,11 +17,6 @@ confirmed_cases_raw = load_data(DATASET_DIR / "covid_19_confirmed_v1.csv")
 deaths_raw = load_data(DATASET_DIR / "covid_19_deaths_v1.csv")
 recovered_raw = load_data(DATASET_DIR / "covid_19_recovered_v1.csv")
 
-confirmed_cases_cleaned = handle_missing_data(
-    confirmed_cases_raw, DatasetType.CONFIRMED_CASES
-)
-deaths_cleaned = handle_missing_data(deaths_raw, DatasetType.DEATHS)
-recovered_cleaned = handle_missing_data(recovered_raw, DatasetType.RECOVERED)
 
 st.set_page_config(layout="wide")
 
@@ -35,6 +30,12 @@ st.markdown("**Q3.1**: Identify and impute missing values using forward fill.")
 st.markdown(
     "**Q4.1**: Replace blank values in the Province column with `'All Provinces'`."
 )
+
+confirmed_cases_cleaned = handle_missing_data(
+    confirmed_cases_raw, DatasetType.CONFIRMED_CASES
+)
+deaths_cleaned = handle_missing_data(deaths_raw, DatasetType.DEATHS)
+recovered_cleaned = handle_missing_data(recovered_raw, DatasetType.RECOVERED)
 
 code_tab, output_tab, ai_insights_tab = st.tabs(["Code", "Results", "AI Insights"])
 
