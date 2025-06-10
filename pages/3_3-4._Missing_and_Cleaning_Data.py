@@ -4,17 +4,13 @@ import streamlit as st
 
 from src.utils.enums import DatasetType
 from src.utils.constants import DATASET_DIR
-from src.pipeline.data_loader import load_data, get_dataset_info
+from src.pipeline.data_loader import load_data
 from src.pipeline.data_cleaner import (
     handle_missing_data,
     rename_column_first_row,
     replace_empty_province,
     drop_non_existing_provinces,
     fix_datatypes,
-)
-from src.pipeline.visualizer import (
-    get_top_countries_confirmed_cases_plot,
-    get_china_countries_confirmed_cases_plot,
 )
 
 confirmed_cases_raw = load_data(DATASET_DIR / "covid_19_confirmed_v1.csv")
@@ -47,7 +43,9 @@ with code_tab:
     with st.expander("View Source Code"):
         st.code(inspect.getsource(handle_missing_data))
 
-    st.markdown("Source code of helper functions and enums used in `handle_missing_data`")
+    st.markdown(
+        "Source code of helper functions and enums used in `handle_missing_data`"
+    )
     with st.expander("View Source Code of `rename_column_first_row`"):
         st.code(inspect.getsource(rename_column_first_row))
 
@@ -59,7 +57,7 @@ with code_tab:
 
     with st.expander("View Source Code of `fix_datatypes`"):
         st.code(inspect.getsource(fix_datatypes))
-    
+
     with st.expander("View Source Code of `DatasetType`"):
         st.code(inspect.getsource(DatasetType))
 
