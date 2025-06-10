@@ -2,8 +2,8 @@ import streamlit as st
 
 from src.pipeline.data_loader import load_data, get_dataset_info
 from src.pipeline.visualizer import (
-    save_top_countries_confirmed_cases_plot,
-    save_china_countries_confirmed_cases_plot,
+    get_top_countries_confirmed_cases_plot,
+    get_china_countries_confirmed_cases_plot,
 )
 from src.pipeline.data_cleaner import (
     handle_missing_data,
@@ -32,13 +32,6 @@ import matplotlib.ticker as ticker
 
 
 def main():
-
-    # Q2.2
-    # save_top_countries_confirmed_cases_plot(confirmed_cases_raw)
-
-    # Q2.3
-    # save_china_countries_confirmed_cases_plot(confirmed_cases_raw)
-
     # Q3 - 4
     # confirmed_cases_cleaned = handle_missing_data(
     #     confirmed_cases_raw, DatasetType.CONFIRMED_CASES

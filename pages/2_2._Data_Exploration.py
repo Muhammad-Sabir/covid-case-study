@@ -5,8 +5,8 @@ import streamlit as st
 from src.utils.constants import DATASET_DIR
 from src.pipeline.data_loader import load_data, get_dataset_info
 from src.pipeline.visualizer import (
-    save_top_countries_confirmed_cases_plot,
-    save_china_countries_confirmed_cases_plot,
+    get_top_countries_confirmed_cases_plot,
+    get_china_countries_confirmed_cases_plot,
 )
 
 st.set_page_config(layout="wide")
@@ -48,14 +48,14 @@ st.markdown("---")
 # Question 2.2
 st.markdown("**Q2.2**: Plot confirmed cases over time for top countries.")
 
-top_countries_fig = save_top_countries_confirmed_cases_plot(confirmed_cases_raw)
+top_countries_fig = get_top_countries_confirmed_cases_plot(confirmed_cases_raw)
 
 code_tab, output_tab, ai_insights_tab = st.tabs(["Code", "Results", "AI Insights"])
 
 with code_tab:
-    st.markdown("Source Code of `save_top_countries_confirmed_cases_plot` Function")
+    st.markdown("Source Code of `get_top_countries_confirmed_cases_plot` Function")
     with st.expander("View Source Code"):
-        st.code(inspect.getsource(save_top_countries_confirmed_cases_plot))
+        st.code(inspect.getsource(get_top_countries_confirmed_cases_plot))
 
 with output_tab:
     st.markdown("### Confirmed Cases")
@@ -73,14 +73,14 @@ st.markdown("---")
 # Question 2.3
 st.markdown("**Q2.3**: Plot confirmed cases over time for China.")
 
-china_confirmed_fig = save_china_countries_confirmed_cases_plot(confirmed_cases_raw)
+china_confirmed_fig = get_china_countries_confirmed_cases_plot(confirmed_cases_raw)
 
 code_tab, output_tab, ai_insights_tab = st.tabs(["Code", "Results", "AI Insights"])
 
 with code_tab:
-    st.markdown("Source Code of `save_china_countries_confirmed_cases_plot` Function")
+    st.markdown("Source Code of `get_china_countries_confirmed_cases_plot` Function")
     with st.expander("View Source Code"):
-        st.code(inspect.getsource(save_china_countries_confirmed_cases_plot))
+        st.code(inspect.getsource(get_china_countries_confirmed_cases_plot))
 
 with output_tab:
     st.markdown("### Confirmed Cases")

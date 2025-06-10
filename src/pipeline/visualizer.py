@@ -1,4 +1,3 @@
-from src.pipeline.data_loader import load_data, get_dataset_info
 from src.logger.logger import logger
 
 import matplotlib.pyplot as plt
@@ -6,10 +5,8 @@ import pandas as pd
 import matplotlib.dates as mdates
 import matplotlib.ticker as ticker
 
-from src.utils.constants import OUTPUTS_DIR
 
-
-def save_top_countries_confirmed_cases_plot(confirmed_cases_df):
+def get_top_countries_confirmed_cases_plot(confirmed_cases_df):
     """
     Takes in the raw dataframe of confirmed cases and cleans it as needed
     and saves the plot of top 5 countries in output directory
@@ -56,7 +53,7 @@ def save_top_countries_confirmed_cases_plot(confirmed_cases_df):
         logger.error(f"An unexpected error occured: {err}")
 
 
-def save_china_countries_confirmed_cases_plot(confirmed_cases_df):
+def get_china_countries_confirmed_cases_plot(confirmed_cases_df):
     """
     Takes in the raw dataframe of confirmed cases and cleans it as needed
     and saves the plot of china's confirmed cases overtime
