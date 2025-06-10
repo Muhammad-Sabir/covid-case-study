@@ -1,15 +1,24 @@
 from src.pipeline.data_loader import load_data, get_dataset_info
 from src.pipeline.visualizer import (
-    save_top_countries_confirmed_cases_plot, save_china_countries_confirmed_cases_plot
+    save_top_countries_confirmed_cases_plot,
+    save_china_countries_confirmed_cases_plot,
 )
 from src.pipeline.data_cleaner import (
-    handle_missing_data, transform_from_wide_to_long, merge_datasets
+    handle_missing_data,
+    transform_from_wide_to_long,
+    merge_datasets,
 )
 from src.pipeline.analyzer import (
-    peak_daily_cases_by_country, compare_recovery_rate, distribution_of_death_rates,
-    get_total_deaths_per_country, get_highest_avg_daily_deaths, total_deaths_overtime,
-    merged_monthly_sum, highest_avg_death_rates_2020, recovery_death_ratio,
-    highest_recovery_confirmed_ratio
+    peak_daily_cases_by_country,
+    compare_recovery_rate,
+    distribution_of_death_rates,
+    get_total_deaths_per_country,
+    get_highest_avg_daily_deaths,
+    total_deaths_overtime,
+    merged_monthly_sum,
+    highest_avg_death_rates_2020,
+    recovery_death_ratio,
+    highest_recovery_confirmed_ratio,
 )
 from src.utils.constants import DATASET_DIR
 from src.utils.enums import DatasetType
@@ -19,11 +28,12 @@ import pandas as pd
 import matplotlib.dates as mdates
 import matplotlib.ticker as ticker
 
+
 def main():
     # Q1.1
-    deaths_raw = load_data(DATASET_DIR / 'covid_19_deaths_v1.csv')
-    confirmed_cases_raw = load_data(DATASET_DIR / 'covid_19_confirmed_v1.csv')
-    recovered_raw = load_data(DATASET_DIR / 'covid_19_recovered_v1.csv')
+    deaths_raw = load_data(DATASET_DIR / "covid_19_deaths_v1.csv")
+    confirmed_cases_raw = load_data(DATASET_DIR / "covid_19_confirmed_v1.csv")
+    recovered_raw = load_data(DATASET_DIR / "covid_19_recovered_v1.csv")
 
     # Q2.1
     # print(get_dataset_info(deaths_raw))
@@ -35,10 +45,11 @@ def main():
 
     # Q2.3
     # save_china_countries_confirmed_cases_plot(confirmed_cases_raw)
-    
-    
+
     # Q3 - 4
-    confirmed_cases_cleaned = handle_missing_data(confirmed_cases_raw, DatasetType.CONFIRMED_CASES)
+    confirmed_cases_cleaned = handle_missing_data(
+        confirmed_cases_raw, DatasetType.CONFIRMED_CASES
+    )
     deaths_cleaned = handle_missing_data(deaths_raw, DatasetType.DEATHS)
     recovered_cleaned = handle_missing_data(recovered_raw, DatasetType.RECOVERED)
     # print(confirmed_cases_cleaned)
@@ -99,7 +110,7 @@ def main():
     merged_df = merge_datasets(
         deaths_cleaned=deaths_cleaned,
         confirmed_cases_cleaned=confirmed_cases_cleaned,
-        recovered_cleaned=recovered_cleaned
+        recovered_cleaned=recovered_cleaned,
     )
     # print(merged_df)
 
@@ -108,7 +119,7 @@ def main():
     # print(monthly_sum)
     # columns_with_na = monthly_sum.columns[monthly_sum.isnull().any()].tolist()
     # print(columns_with_na)
-    
+
     # Q7.3
     # countries = ['US', 'Italy', 'Brazil']
     # filtered_monthly_sum = monthly_sum[monthly_sum['Country/Region'].isin(countries)]
@@ -121,13 +132,13 @@ def main():
     # print(top_3_avg)
 
     # Q8.2
-    sa_ratio = recovery_death_ratio(merged_df, 'South Africa')
+    sa_ratio = recovery_death_ratio(merged_df, "South Africa")
     # print(sa_ratio)
 
     # Q8.3
-    us_ratio = highest_recovery_confirmed_ratio(merged_df, 'US')
-    print(us_ratio)
-    
+    us_ratio = highest_recovery_confirmed_ratio(merged_df, "US")
+    # print(us_ratio)
+
     """DONE"""
 
 

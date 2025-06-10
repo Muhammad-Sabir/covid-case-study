@@ -1,4 +1,3 @@
-
 {
   "version": 1,
   "disable_existing_loggers": false,
@@ -39,19 +38,14 @@
     },
     "queue_handler": {
       "class": "logging.handlers.QueueHandler",
-      "handlers": [
-        "stderr",
-        "file_json"
-      ],
+      "handlers": ["stderr", "file_json"],
       "respect_handler_level": true
     }
   },
   "loggers": {
     "root": {
       "level": "DEBUG",
-      "handlers": [
-        "queue_handler"
-      ]
+      "handlers": ["queue_handler"]
     }
   }
 }

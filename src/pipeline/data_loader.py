@@ -3,13 +3,14 @@ import pandas as pd
 
 from src.logger.logger import logger
 
+
 def load_data(path):
     """
     Takes the location of the csv file and returns a dataframe of the csv file provided.
 
     Parameters:
         path: Location of your csv data file
-    
+
     Returns:
         df: Dataframe of the loaded csv
     """
@@ -23,13 +24,14 @@ def load_data(path):
     except Exception as err:
         logger.error(f"An unexcected error occured while loading {path} file: {err}")
 
+
 def get_dataset_info(df):
     """
     Takes in a dataframe and returns its .info() in string.
 
     Parameters:
         df: A pandas DataFrame
-    
+
     Returns:
         info_string: df.info() converted into string
     """
