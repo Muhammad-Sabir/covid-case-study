@@ -18,7 +18,7 @@ def save_top_countries_confirmed_cases_plot(confirmed_cases_df):
         confirmed_cases_df: df (Pandas DataFrame) of confirmed cases
 
     Returns:
-        None
+        fig: matplotlib.figure.Figure
     """
     try:
         # Group the countries based on Country/Region and sum their cases and drop unnecessary data
@@ -34,23 +34,24 @@ def save_top_countries_confirmed_cases_plot(confirmed_cases_df):
         columns_datetime = pd.to_datetime(top_5_countries.columns, format="%m/%d/%y")
 
         # Customize and plot overtime, and save the figure
-        plt.figure(figsize=(14, 6))
+        fig, ax = plt.subplots(figsize=(14, 6))
 
         for index, row in top_5_countries.iterrows():
-            plt.plot(columns_datetime, row.values, label=f"{index}")
+            ax.plot(columns_datetime, row.values, label=f"{index}")
 
-        plt.title("Confirmed Cases in Top 5 Countries")
-        plt.xlabel("Date")
-        plt.ylabel("Confirmed Cases")
-        plt.gca().xaxis.set_major_locator(mdates.MonthLocator())
-        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m-%d"))
-        plt.gca().yaxis.set_major_formatter(ticker.StrMethodFormatter("{x:,.0f}"))
-        plt.legend()
-        plt.tight_layout()
-        plt.subplots_adjust(bottom=0.14)
-        plt.xticks(rotation=15)
-        plt.grid(True)
-        plt.savefig(OUTPUTS_DIR / "top_five_countries_cases_overtime.svg")
+        ax.set_title("Confirmed Cases in Top 5 Countries")
+        ax.set_xlabel("Date")
+        ax.set_ylabel("Confirmed Cases")
+        ax.xaxis.set_major_locator(mdates.MonthLocator())
+        ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m-%d"))
+        ax.yaxis.set_major_formatter(ticker.StrMethodFormatter("{x:,.0f}"))
+        ax.legend()
+        fig.tight_layout()
+        fig.subplots_adjust(bottom=0.14)
+        plt.setp(ax.get_xticklabels(), rotation=15)
+        ax.grid(True)
+
+        return fig
     except Exception as err:
         logger.error(f"An unexpected error occured: {err}")
 
@@ -64,7 +65,7 @@ def save_china_countries_confirmed_cases_plot(confirmed_cases_df):
         confirmed_cases_df: df (Pandas DataFrame) of confirmed cases
 
     Returns:
-        None
+        fig: matplotlib.figure.Figure
     """
     try:
         # Filter out all of the china regions and group them up and sum their cases
@@ -85,22 +86,24 @@ def save_china_countries_confirmed_cases_plot(confirmed_cases_df):
             grouped_china_confirmed_cases.columns, format="%m/%d/%y"
         )
 
-        # Customize and plot overtime, and save the figure
-        plt.figure(figsize=(14, 6))
-        plt.plot(
-            columns_datetime, grouped_china_confirmed_cases.iloc[0], label=f"China"
+        # Create the plot
+        fig, ax = plt.subplots(figsize=(14, 6))
+        ax.plot(
+            columns_datetime, grouped_china_confirmed_cases.iloc[0], label="China"
         )
-        plt.title("Confirmed Cases in China Overtime")
-        plt.xlabel("Date")
-        plt.ylabel("Confirmed Cases")
-        plt.gca().xaxis.set_major_locator(mdates.MonthLocator())
-        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m-%d"))
-        plt.gca().yaxis.set_major_formatter(ticker.StrMethodFormatter("{x:,.0f}"))
-        plt.legend()
-        plt.tight_layout()
-        plt.subplots_adjust(bottom=0.14)
-        plt.xticks(rotation=15)
-        plt.grid(True)
-        plt.savefig(OUTPUTS_DIR / "china_confirmed_cases_overtime.svg")
+
+        ax.set_title("Confirmed Cases in China Over Time")
+        ax.set_xlabel("Date")
+        ax.set_ylabel("Confirmed Cases")
+        ax.xaxis.set_major_locator(mdates.MonthLocator())
+        ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m-%d"))
+        ax.yaxis.set_major_formatter(ticker.StrMethodFormatter("{x:,.0f}"))
+        ax.legend()
+        fig.tight_layout()
+        fig.subplots_adjust(bottom=0.14)
+        plt.setp(ax.get_xticklabels(), rotation=15)
+        ax.grid(True)
+
+        return fig
     except Exception as err:
         logger.error(f"An unexpected error occured: {err}")
