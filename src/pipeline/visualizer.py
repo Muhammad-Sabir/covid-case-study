@@ -22,9 +22,8 @@ def get_top_countries_confirmed_cases_plot(confirmed_cases_df):
         grouped_countries = confirmed_cases_df.groupby("Country/Region").sum()
         grouped_countries.drop(columns=["Province/State", "Lat", "Long"], inplace=True)
 
-        # Sum all of the confirmed cases and pick 5 countries with most cases of all time
-        series_of_sums = grouped_countries.select_dtypes(include="number").sum(axis=1)
-        top_5_countries_index = series_of_sums.nlargest(5).index
+        # Pick 5 countries with most cases of all time
+        top_5_countries_index = grouped_countries.iloc[:, -1].nlargest(5).index
         top_5_countries = grouped_countries.loc[top_5_countries_index]
 
         # Convert the columns to proper datetime format

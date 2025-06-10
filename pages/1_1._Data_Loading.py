@@ -19,7 +19,7 @@ recovered_raw = load_data(DATASET_DIR / "covid_19_recovered_v1.csv")
 code_tab, output_tab, ai_insights_tab = st.tabs(["Code", "Results", "AI Insights"])
 
 with code_tab:
-    st.markdown("Source Code of `load_data` Function")
+    st.markdown("Source code of `load_data` function")
     with st.expander("View Source Code"):
         st.code(inspect.getsource(load_data))
 

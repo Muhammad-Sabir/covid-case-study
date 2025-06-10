@@ -28,7 +28,7 @@ recovered_info = get_dataset_info(recovered_raw)
 code_tab, output_tab, ai_insights_tab = st.tabs(["Code", "Results", "AI Insights"])
 
 with code_tab:
-    st.markdown("Source Code of `get_dataset_info` Function")
+    st.markdown("Source code of `get_dataset_info` function")
     with st.expander("View Source Code"):
         st.code(inspect.getsource(get_dataset_info))
 
@@ -53,7 +53,7 @@ top_countries_fig = get_top_countries_confirmed_cases_plot(confirmed_cases_raw)
 code_tab, output_tab, ai_insights_tab = st.tabs(["Code", "Results", "AI Insights"])
 
 with code_tab:
-    st.markdown("Source Code of `get_top_countries_confirmed_cases_plot` Function")
+    st.markdown("Source code of `get_top_countries_confirmed_cases_plot` function")
     with st.expander("View Source Code"):
         st.code(inspect.getsource(get_top_countries_confirmed_cases_plot))
 
@@ -78,7 +78,7 @@ china_confirmed_fig = get_china_countries_confirmed_cases_plot(confirmed_cases_r
 code_tab, output_tab, ai_insights_tab = st.tabs(["Code", "Results", "AI Insights"])
 
 with code_tab:
-    st.markdown("Source Code of `get_china_countries_confirmed_cases_plot` Function")
+    st.markdown("Source code of `get_china_countries_confirmed_cases_plot` function")
     with st.expander("View Source Code"):
         st.code(inspect.getsource(get_china_countries_confirmed_cases_plot))
 

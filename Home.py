@@ -1,53 +1,7 @@
 import streamlit as st
 
-from src.pipeline.data_loader import load_data, get_dataset_info
-from src.pipeline.visualizer import (
-    get_top_countries_confirmed_cases_plot,
-    get_china_countries_confirmed_cases_plot,
-)
-from src.pipeline.data_cleaner import (
-    handle_missing_data,
-    transform_from_wide_to_long,
-    merge_datasets,
-)
-from src.pipeline.analyzer import (
-    peak_daily_cases_by_country,
-    compare_recovery_rate,
-    distribution_of_death_rates,
-    get_total_deaths_per_country,
-    get_highest_avg_daily_deaths,
-    total_deaths_overtime,
-    merged_monthly_sum,
-    highest_avg_death_rates_2020,
-    recovery_death_ratio,
-    highest_recovery_confirmed_ratio,
-)
-from src.utils.constants import DATASET_DIR
-from src.utils.enums import DatasetType
-
-import matplotlib.pyplot as plt
-import pandas as pd
-import matplotlib.dates as mdates
-import matplotlib.ticker as ticker
-
 
 def main():
-    # Q3 - 4
-    # confirmed_cases_cleaned = handle_missing_data(
-    #     confirmed_cases_raw, DatasetType.CONFIRMED_CASES
-    # )
-    # deaths_cleaned = handle_missing_data(deaths_raw, DatasetType.DEATHS)
-    # recovered_cleaned = handle_missing_data(recovered_raw, DatasetType.RECOVERED)
-    # print(confirmed_cases_cleaned)
-    # print(deaths_cleaned)
-    # print(recovered_cleaned)
-    # columns_with_na = confirmed_cases_cleaned.columns[confirmed_cases_cleaned.isnull().any()].tolist()
-    # print(columns_with_na)
-    # columns_with_na = deaths_cleaned.columns[deaths_cleaned.isnull().any()].tolist()
-    # print(columns_with_na)
-    # columns_with_na = recovered_cleaned.columns[recovered_cleaned.isnull().any()].tolist()
-    # print(columns_with_na)
-
     # Q5.1
     # peak_daily_cases = peak_daily_cases_by_country(confirmed_cases_cleaned, ['Germany', 'France', 'Italy'])
     # print(peak_daily_cases)
