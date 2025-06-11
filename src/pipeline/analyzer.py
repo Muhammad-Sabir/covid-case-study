@@ -12,8 +12,8 @@ def peak_daily_cases_by_country(confirmed_cases_cleaned, countries):
         confirmed_cases_cleaned: Cleaned DataFrame of confirmed cases
         countries: A list of country names
 
-        Returns:
-            peak_daily_cases: A DataFrame containing peak daily cases of the countries
+    Returns:
+        peak_daily_cases: A DataFrame containing peak daily cases of the countries
     """
     try:
         filtered_countries = confirmed_cases_cleaned[
@@ -52,8 +52,8 @@ def compare_recovery_rate(
         country_one: Name of first country
         country_two: Name of the second country
 
-        Returns:
-            recovery_rates: A DataFrame containing comparison of recovery rates
+    Returns:
+        recovery_rates: A DataFrame containing comparison of recovery rates
     """
     try:
         filtered_recovered = recovered_cleaned[
@@ -75,7 +75,7 @@ def compare_recovery_rate(
         recovery_rates = (
             ((filtered_recovered / filtered_confirmed) * 100).fillna(0.0).round(2)
         )
-        recovery_rates = recovery_rates.loc[:, :date]
+        recovery_rates = recovery_rates.loc[:, date]
 
         return recovery_rates
     except Exception as err:
@@ -94,8 +94,8 @@ def distribution_of_death_rates(deaths_cleaned, confirmed_cases_cleaned, country
         country: Name of a country
         date: Date as of which you want the distribution
 
-        Returns:
-            death_rates: A DataFrame containing comparison of death rates at specific date
+    Returns:
+        death_rates: A DataFrame containing comparison of death rates at specific date
     """
     try:
         filtered_deaths = deaths_cleaned[deaths_cleaned["Country/Region"] == country]
@@ -116,8 +116,34 @@ def distribution_of_death_rates(deaths_cleaned, confirmed_cases_cleaned, country
             ((filtered_deaths / filtered_confirmed) * 100).fillna(0.0).round(2)
         )
         death_rates = death_rates[[date]]
+        death_rates.columns = ["Death Rates"]
 
         return death_rates
+    except Exception as err:
+        logger.error(f"An unexpected error occured: {str(err)}", exc_info=True)
+
+
+def get_extreme_death_rates(death_rates):
+    """
+    Takes in death rates dataframe, and returns a dataframe of with
+    province and death rate of the highest death rate
+
+    Parameters:
+        death_rates: A DataFrame containing comparison of death rates at specific date
+
+    Returns:
+        extremes_df: A DataFrame containing rows for the highest and lowest death rates
+    """
+    try:
+        if death_rates.empty:
+            return pd.DataFrame(columns=["Province/State", "Death Rates"])
+        
+        max_row = death_rates.loc[[death_rates["Death Rates"].idxmax()]]
+        min_row = death_rates.loc[[death_rates["Death Rates"].idxmin()]]
+        
+        extremes_df = pd.concat([max_row, min_row]).drop_duplicates()
+
+        return extremes_df
     except Exception as err:
         logger.error(f"An unexpected error occured: {str(err)}", exc_info=True)
 
