@@ -126,7 +126,7 @@ def distribution_of_death_rates(deaths_cleaned, confirmed_cases_cleaned, country
 def get_extreme_death_rates(death_rates):
     """
     Takes in death rates dataframe, and returns a dataframe of with
-    province and death rate of the highest death rate
+    provinces and death rate of the highest and lowest death rates
 
     Parameters:
         death_rates: A DataFrame containing comparison of death rates at specific date
@@ -137,10 +137,10 @@ def get_extreme_death_rates(death_rates):
     try:
         if death_rates.empty:
             return pd.DataFrame(columns=["Province/State", "Death Rates"])
-        
+
         max_row = death_rates.loc[[death_rates["Death Rates"].idxmax()]]
         min_row = death_rates.loc[[death_rates["Death Rates"].idxmin()]]
-        
+
         extremes_df = pd.concat([max_row, min_row]).drop_duplicates()
 
         return extremes_df
@@ -148,89 +148,89 @@ def get_extreme_death_rates(death_rates):
         logger.error(f"An unexpected error occured: {str(err)}", exc_info=True)
 
 
-def get_total_deaths_per_country(deaths_cleaned):
+def get_total_deaths_per_country(long_deaths_df):
     """
-    Takes in cleaned deaths dataframe, and returns a dataframe with
+    Takes in cleaned deaths dataframe in long format, and returns a dataframe with
     total deaths per country
 
     Parameters:
-        deaths_cleaned: Cleaned DataFrame of death cases
+        long_deaths_df: Cleaned DataFrame of death cases in long format
 
     Returns:
         total_deaths_df: A DataFrame containing total deaths per country
     """
     try:
-        # Drop unnecessary columns
-        deaths_cleaned = deaths_cleaned.drop(columns=["Lat", "Long", "Province/State"])
+        latest_date = long_deaths_df["Date"].max()
 
-        # Add total deaths column
-        total_deaths = deaths_cleaned.sum(axis=1, numeric_only=True)
-        total_deaths_df = deaths_cleaned.assign(**{"Total Deaths": total_deaths}).copy()
+        total_deaths_df = long_deaths_df[long_deaths_df["Date"] == latest_date]
+        total_deaths_df = total_deaths_df.drop(
+            columns=["Lat", "Long", "Province/State"]
+        )
+        total_deaths_df = (
+            total_deaths_df.groupby("Country/Region")
+            .sum(numeric_only=True)
+            .sort_values(by="Deaths", ascending=False)
+            .reset_index()
+        )
 
         return total_deaths_df
     except Exception as err:
         logger.error(f"An unexpected error occured: {str(err)}", exc_info=True)
 
 
-def get_highest_avg_daily_deaths(deaths_cleaned, number_of_countries):
+def get_highest_avg_daily_deaths(long_deaths_df, number_of_countries=5):
     """
     Takes in cleaned deaths dataframe, and returns a dataframe of top 5 countries with
     highest average daily deaths
 
     Parameters:
-        deaths_cleaned: Cleaned DataFrame of death cases
+        long_deaths_df: Cleaned DataFrame of death cases in long format
         number_of_countries: Integer number of countries you want
 
     Returns:
-        highest_deaths: A DataFrame with highest average daily deaths countries
+        average_daily_deaths: A DataFrame with highest average daily deaths countries
     """
     try:
-        # Drop unnecessary columns
-        deaths_cleaned = deaths_cleaned.drop(columns=["Lat", "Long", "Province/State"])
+        long_deaths_df = long_deaths_df.drop(columns=["Lat", "Long", "Province/State"])
+        long_deaths_df = long_deaths_df.sort_values(["Country/Region", "Date"])
+        long_deaths_df["Average Daily Deaths"] = (
+            long_deaths_df.groupby("Country/Region")["Deaths"].diff().fillna(0.0)
+        )
 
-        deaths_cleaned = deaths_cleaned.groupby("Country/Region").sum().reset_index()
+        average_daily_deaths = (
+            long_deaths_df.groupby("Country/Region")["Average Daily Deaths"]
+            .mean()
+            .sort_values(ascending=False)
+            .head(number_of_countries)
+        )
 
-        # Add total deaths column
-        average_daily_deaths = deaths_cleaned.mean(axis=1, numeric_only=True).round(2)
-        highest_deaths = deaths_cleaned.assign(
-            **{"Average Daily Deaths": average_daily_deaths}
-        ).copy()
-
-        highest_deaths = highest_deaths.sort_values(
-            "Average Daily Deaths", ascending=False
-        ).head(number_of_countries)
-
-        return highest_deaths
+        return average_daily_deaths
     except Exception as err:
         logger.error(f"An unexpected error occured: {str(err)}", exc_info=True)
 
 
-def total_deaths_overtime(deaths_cleaned, country_name):
+def total_deaths_overtime(long_deaths_df, country_name):
     """
     Takes in cleaned deaths dataframe, and returns a dataframe of deaths
     overtime.
 
     Parameters:
-        deaths_cleaned: Cleaned DataFrame of death cases
+        long_deaths_df: Cleaned DataFrame of death cases in long format
         country_name: Name of the country you want the overtime deaths for
 
     Returns:
         overtime_deaths: A DataFrame with overtime deaths of the specified country
     """
     try:
-        overtime_deaths = deaths_cleaned[
-            deaths_cleaned["Country/Region"] == country_name
+        overtime_deaths = long_deaths_df[
+            long_deaths_df["Country/Region"] == country_name
         ]
 
         # Drop unnecessary columns
-        overtime_deaths = overtime_deaths.groupby("Country/Region").sum()
+        overtime_deaths = overtime_deaths.sort_values(["Date"]).reset_index()
         overtime_deaths = overtime_deaths.drop(
-            columns=["Lat", "Long", "Province/State"]
+            columns=["Lat", "Long", "Province/State", "Country/Region", "index"]
         )
-
-        overtime_deaths = overtime_deaths.T
-        overtime_deaths.index = pd.to_datetime(overtime_deaths.index, format="%m/%d/%y")
-        overtime_deaths.columns = ["Total_Deaths"]
 
         return overtime_deaths
     except Exception as err:
