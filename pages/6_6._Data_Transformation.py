@@ -7,26 +7,17 @@ from src.utils.constants import DATASET_DIR
 from src.pipeline.data_loader import load_data
 from src.pipeline.data_cleaner import (
     handle_missing_data,
-    rename_column_first_row,
-    replace_empty_province,
-    drop_non_existing_provinces,
-    fix_datatypes,
     transform_from_wide_to_long,
-    handle_missing_data,
-    merge_datasets,
 )
 from src.pipeline.analyzer import (
-    peak_daily_cases_by_country,
-    compare_recovery_rate,
-    distribution_of_death_rates,
-    get_extreme_death_rates,
     get_total_deaths_per_country,
     get_highest_avg_daily_deaths,
     total_deaths_overtime,
-    merged_monthly_sum,
-    highest_avg_death_rates_2020,
-    recovery_death_ratio,
-    highest_recovery_confirmed_ratio,
+)
+from src.pipeline.visualizer import (
+    plot_total_deaths_per_country,
+    plot_highest_avg_daily_deaths,
+    plot_deaths_overtime,
 )
 
 
@@ -80,9 +71,14 @@ with code_tab:
     with st.expander("View Source Code"):
         st.code(inspect.getsource(get_total_deaths_per_country))
 
+    with st.expander("View Source Code"):
+        st.code(inspect.getsource(plot_total_deaths_per_country))
+
+
 with output_tab:
     st.markdown("### Total Deaths Per Country To Date")
     st.dataframe(total_deaths_per_country)
+    st.pyplot(plot_total_deaths_per_country(total_deaths_per_country))
 
 with ai_insights_tab:
     st.markdown("### Coming soon...")
@@ -100,10 +96,13 @@ with code_tab:
     st.markdown("Source code of `get_highest_avg_daily_deaths` function")
     with st.expander("View Source Code"):
         st.code(inspect.getsource(get_highest_avg_daily_deaths))
+    with st.expander("View Source Code"):
+        st.code(inspect.getsource(plot_highest_avg_daily_deaths))
 
 with output_tab:
     st.markdown("### Top 5 Average Daily Deaths")
     st.dataframe(highest_avg_daily_deaths)
+    st.pyplot(plot_highest_avg_daily_deaths(highest_avg_daily_deaths))
 
 with ai_insights_tab:
     st.markdown("### Coming soon...")
@@ -121,10 +120,13 @@ with code_tab:
     st.markdown("Source code of `total_deaths_overtime` function")
     with st.expander("View Source Code"):
         st.code(inspect.getsource(total_deaths_overtime))
+    with st.expander("View Source Code"):
+        st.code(inspect.getsource(plot_deaths_overtime))
 
 with output_tab:
     st.markdown("### US Total Death Evolution")
     st.dataframe(deaths_overtime)
+    st.pyplot(plot_deaths_overtime(deaths_overtime, "US"))
 
 with ai_insights_tab:
     st.markdown("### Coming soon...")

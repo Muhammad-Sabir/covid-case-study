@@ -5,25 +5,17 @@ import streamlit as st
 from src.utils.enums import DatasetType
 from src.utils.constants import DATASET_DIR
 from src.pipeline.data_loader import load_data
-from src.pipeline.data_cleaner import (
-    handle_missing_data,
-    rename_column_first_row,
-    replace_empty_province,
-    drop_non_existing_provinces,
-    fix_datatypes,
-)
+from src.pipeline.data_cleaner import handle_missing_data
 from src.pipeline.analyzer import (
     peak_daily_cases_by_country,
     compare_recovery_rate,
     distribution_of_death_rates,
     get_extreme_death_rates,
-    get_total_deaths_per_country,
-    get_highest_avg_daily_deaths,
-    total_deaths_overtime,
-    merged_monthly_sum,
-    highest_avg_death_rates_2020,
-    recovery_death_ratio,
-    highest_recovery_confirmed_ratio,
+)
+from src.pipeline.visualizer import (
+    plot_peak_daily_cases,
+    plot_recovery_rates,
+    plot_death_rate_distribution,
 )
 
 
@@ -57,10 +49,13 @@ with code_tab:
     st.markdown("Source code of `peak_daily_cases_by_country` function")
     with st.expander("View Source Code"):
         st.code(inspect.getsource(peak_daily_cases_by_country))
+    with st.expander("View Source Code"):
+        st.code(inspect.getsource(plot_peak_daily_cases))
 
 with output_tab:
     st.markdown("### Peak Daily Confirmed Cases")
     st.dataframe(peak_daily_cases)
+    st.pyplot(plot_peak_daily_cases(peak_daily_cases))
 
 with ai_insights_tab:
     st.markdown("### Coming soon...")
@@ -86,10 +81,13 @@ with code_tab:
     st.markdown("Source code of `compare_recovery_rate` function")
     with st.expander("View Source Code"):
         st.code(inspect.getsource(compare_recovery_rate))
+    with st.expander("View Source Code"):
+        st.code(inspect.getsource(plot_recovery_rates))
 
 with output_tab:
     st.markdown("### Recovery Rates: Canada vs Australia")
     st.dataframe(recovery_rates)
+    st.pyplot(plot_recovery_rates(recovery_rates, "12/31/20"))
 
 with ai_insights_tab:
     st.markdown("### Coming soon...")
@@ -114,6 +112,9 @@ with code_tab:
     with st.expander("View Source Code"):
         st.code(inspect.getsource(distribution_of_death_rates))
 
+    with st.expander("View Source Code"):
+        st.code(inspect.getsource(plot_death_rate_distribution))
+
     st.markdown("Source code of `get_extreme_death_rates` function")
     with st.expander("View Source Code"):
         st.code(inspect.getsource(get_extreme_death_rates))
@@ -121,8 +122,11 @@ with code_tab:
 with output_tab:
     st.markdown("### Canadian Provinces Death Rate Distribution")
     st.dataframe(death_rate_distribution)
+    st.pyplot(
+        plot_death_rate_distribution(death_rate_distribution, "Canada", "5/29/21")
+    )
 
-    st.markdown("### Provinces With Max Death Rate")
+    st.markdown("### Provinces With Max and Lowest Death Rate")
     st.dataframe(max_death_rate)
 
 with ai_insights_tab:

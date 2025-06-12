@@ -1,9 +1,12 @@
 import io
+
 import pandas as pd
+import streamlit as st
 
 from src.logger.logger import logger
 
 
+@st.cache_data
 def load_data(path):
     """
     Takes the location of the csv file and returns a dataframe of the csv file provided.
@@ -43,7 +46,6 @@ def get_dataset_info(df):
         df.info(buf=buffer)
         info_string = buffer.getvalue()
 
-        logger.info(f"Successfully generated info_string")
         return info_string
     except Exception as err:
         logger.error(f"An unexpected error occured {err}")

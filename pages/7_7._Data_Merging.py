@@ -10,6 +10,10 @@ from src.pipeline.data_cleaner import (
     merge_datasets,
 )
 from src.pipeline.analyzer import merged_monthly_sum
+from src.pipeline.visualizer import (
+    plot_global_monthly_sums,
+    plot_monthly_trends_by_country,
+)
 
 
 confirmed_cases_raw = load_data(DATASET_DIR / "covid_19_confirmed_v1.csv")
@@ -63,10 +67,13 @@ with code_tab:
     st.markdown("Source code of `merged_monthly_sum` function")
     with st.expander("View Source Code"):
         st.code(inspect.getsource(merged_monthly_sum))
+    with st.expander("View Source Code"):
+        st.code(inspect.getsource(plot_global_monthly_sums))
 
 with output_tab:
     st.markdown("### Monthly Sum")
     st.dataframe(monthly_sum)
+    st.pyplot(plot_global_monthly_sums(monthly_sum))
 
 with ai_insights_tab:
     st.markdown("### Coming soon...")
@@ -90,10 +97,13 @@ with code_tab:
             filtered_monthly_sum = monthly_sum[monthly_sum['Country/Region'].isin(countries)]
             """
         )
+    with st.expander("View Source Code"):
+        st.code(inspect.getsource(plot_monthly_trends_by_country))
 
 with output_tab:
     st.markdown("### Monthly Sum for US, Brazil, Italy")
     st.dataframe(filtered_monthly_sum)
+    st.pyplot(plot_monthly_trends_by_country(filtered_monthly_sum, countries))
 
 with ai_insights_tab:
     st.markdown("### Coming soon...")
