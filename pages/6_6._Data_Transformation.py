@@ -42,17 +42,15 @@ recovered_cleaned = handle_missing_data(recovered_raw, DatasetType.RECOVERED)
 
 st.set_page_config(layout="wide")
 
-st.title("Independent Dataset Analysis")
+st.title("Data Transformation")
 st.caption(
-    "Deep-dive into specific country metrics and comparisons based on cleaned COVID-19 data."
+    "This section is about transforming data and performing function in long format data."
 )
 
 # Question 6.1
 st.markdown("**Q6.1**: Transform 'deaths' dataset from wide to long format.")
 
-long_deaths_df = transform_from_wide_to_long(
-    deaths_cleaned, DatasetType.DEATHS
-)
+long_deaths_df = transform_from_wide_to_long(deaths_cleaned, DatasetType.DEATHS)
 
 code_tab, output_tab, ai_insights_tab = st.tabs(["Code", "Results", "AI Insights"])
 
@@ -115,7 +113,7 @@ st.markdown("---")
 # Question 6.4
 st.markdown("**Q6.4**: Evolution of total deaths in the US over time.")
 
-deaths_overtime = total_deaths_overtime(long_deaths_df, 'US')
+deaths_overtime = total_deaths_overtime(long_deaths_df, "US")
 
 code_tab, output_tab, ai_insights_tab = st.tabs(["Code", "Results", "AI Insights"])
 

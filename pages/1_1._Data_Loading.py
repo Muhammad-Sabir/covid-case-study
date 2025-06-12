@@ -8,7 +8,9 @@ from src.pipeline.data_loader import load_data
 st.set_page_config(layout="wide")
 
 st.title("Data Loading")
-st.caption("This section loads and displays COVID-19 datasets using custom data loading logic.")
+st.caption(
+    "This section loads and displays COVID-19 datasets using custom data loading logic."
+)
 
 st.markdown("**Q1.1**: Load the COVID-19 datasets using Pandas")
 

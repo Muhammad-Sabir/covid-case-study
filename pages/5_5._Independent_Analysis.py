@@ -68,14 +68,16 @@ with ai_insights_tab:
 st.markdown("---")
 
 # Question 5.2
-st.markdown("**Q5.2**: Compare recovery rates: Canada vs Australia (as of Dec 31, 2020).")
+st.markdown(
+    "**Q5.2**: Compare recovery rates: Canada vs Australia (as of Dec 31, 2020)."
+)
 
 recovery_rates = compare_recovery_rate(
     recovered_cleaned=recovered_cleaned,
     confirmed_cases_cleaned=confirmed_cases_cleaned,
-    country_one='Australia',
-    country_two='Canada',
-    date='12/31/20'
+    country_one="Australia",
+    country_two="Canada",
+    date="12/31/20",
 )
 
 code_tab, output_tab, ai_insights_tab = st.tabs(["Code", "Results", "AI Insights"])
@@ -100,8 +102,8 @@ st.markdown("**Q5.3**: Death rate distribution among Canadian provinces.")
 death_rate_distribution = distribution_of_death_rates(
     deaths_cleaned=deaths_cleaned,
     confirmed_cases_cleaned=confirmed_cases_cleaned,
-    country='Canada',
-    date='5/29/21'
+    country="Canada",
+    date="5/29/21",
 )
 max_death_rate = get_extreme_death_rates(death_rate_distribution)
 
@@ -111,7 +113,7 @@ with code_tab:
     st.markdown("Source code of `distribution_of_death_rates` function")
     with st.expander("View Source Code"):
         st.code(inspect.getsource(distribution_of_death_rates))
-    
+
     st.markdown("Source code of `get_extreme_death_rates` function")
     with st.expander("View Source Code"):
         st.code(inspect.getsource(get_extreme_death_rates))
