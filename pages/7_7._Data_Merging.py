@@ -40,7 +40,7 @@ merged_df = merge_datasets(
     recovered_cleaned=recovered_cleaned,
 )
 
-code_tab, output_tab, ai_insights_tab = st.tabs(["Code", "Results", "AI Insights"])
+code_tab, output_tab = st.tabs(["Code", "Results"])
 
 with code_tab:
     st.markdown("Source code of `merge_datasets` function")
@@ -51,9 +51,6 @@ with output_tab:
     st.markdown("### Merrged Dataset")
     st.dataframe(merged_df)
 
-with ai_insights_tab:
-    st.markdown("### Coming soon...")
-
 st.markdown("---")
 
 # Question 7.2
@@ -61,7 +58,7 @@ st.markdown("**Q7.2**: Monthly sums of confirmed, deaths, recoveries by country.
 
 monthly_sum = merged_monthly_sum(merged_df)
 
-code_tab, output_tab, ai_insights_tab = st.tabs(["Code", "Results", "AI Insights"])
+code_tab, output_tab = st.tabs(["Code", "Results"])
 
 with code_tab:
     st.markdown("Source code of `merged_monthly_sum` function")
@@ -75,9 +72,6 @@ with output_tab:
     st.dataframe(monthly_sum)
     st.pyplot(plot_global_monthly_sums(monthly_sum))
 
-with ai_insights_tab:
-    st.markdown("### Coming soon...")
-
 st.markdown("---")
 
 # Question 7.3
@@ -86,7 +80,7 @@ st.markdown("**Q7.3**: Repeat Q7.2 for US, Italy, Brazil.")
 countries = ["US", "Italy", "Brazil"]
 filtered_monthly_sum = monthly_sum[monthly_sum["Country/Region"].isin(countries)]
 
-code_tab, output_tab, ai_insights_tab = st.tabs(["Code", "Results", "AI Insights"])
+code_tab, output_tab = st.tabs(["Code", "Results"])
 
 with code_tab:
     st.markdown("Source code of getting `filtered_monthly_sum`")
@@ -104,6 +98,3 @@ with output_tab:
     st.markdown("### Monthly Sum for US, Brazil, Italy")
     st.dataframe(filtered_monthly_sum)
     st.pyplot(plot_monthly_trends_by_country(filtered_monthly_sum, countries))
-
-with ai_insights_tab:
-    st.markdown("### Coming soon...")
