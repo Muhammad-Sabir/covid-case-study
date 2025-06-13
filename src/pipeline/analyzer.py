@@ -16,26 +16,31 @@ def peak_daily_cases_by_country(confirmed_cases_cleaned, countries):
         peak_daily_cases: A DataFrame containing peak daily cases of the countries
     """
     try:
-        filtered_countries = confirmed_cases_cleaned[
-            confirmed_cases_cleaned["Country/Region"].isin(countries)
-        ]
-        filtered_countries = filtered_countries.groupby("Country/Region").sum()
-        filtered_countries = filtered_countries.drop(
-            columns=["Province/State", "Lat", "Long"]
-        )
-        max_values = filtered_countries.max(axis=1)
-        max_value_columns = filtered_countries.idxmax(axis=1)
+        # Filter for selected countries
+        filtered = confirmed_cases_cleaned[confirmed_cases_cleaned["Country/Region"].isin(countries)]
+        
+        # Group by country and sum across provinces
+        country_df = filtered.groupby("Country/Region").sum(numeric_only=True)
+        country_df.drop(columns=["Lat", "Long"], errors='ignore', inplace=True)
 
-        peak_daily_cases = pd.DataFrame(
-            {"Max Confirmed Cases Per Day": max_values, "Date": max_value_columns}
-        )
-        peak_daily_cases.sort_values(
-            by="Max Confirmed Cases Per Day", ascending=False, inplace=True
-        )
+        # Compute daily new cases
+        daily_new_cases = country_df.diff(axis=1).fillna(0)
+
+        # Get peak value and the date it occurred
+        max_values = daily_new_cases.max(axis=1)
+        max_dates = daily_new_cases.idxmax(axis=1)
+
+        peak_daily_cases = pd.DataFrame({
+            "Max Confirmed Cases Per Day": max_values.astype(int),
+            "Date": max_dates
+        })
+
+        peak_daily_cases.sort_values(by="Max Confirmed Cases Per Day", ascending=False, inplace=True)
 
         return peak_daily_cases
+
     except Exception as err:
-        logger.error(f"An unexpected error occured: {str(err)}", exc_info=True)
+        logger.error(f"An unexpected error occurred: {str(err)}", exc_info=True)
 
 
 def compare_recovery_rate(
