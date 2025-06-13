@@ -27,14 +27,14 @@ The goal of this project is to explore COVID-19 data through various statistical
 
 AI-generated insights were included for the following questions:
 
-- 5.1 – Total Cases by Continent
-- 5.2 – Total Deaths by Continent
-- 5.3 – Total Recoveries by Continent
-- 6.3 – Top 10 Countries by Death Rate
-- 6.4 – Countries with Lowest Death Rate
-- 8.1 – Monthly Cases Trend
-- 8.2 – Monthly Deaths Trend
-- 8.3 – Monthly Recoveries Trend
+- 5.1
+- 5.2
+- 5.3
+- 6.3
+- 6.4
+- 8.1
+- 8.2
+- 8.3
 
 These insights are retrieved using the Gemini Flash 1.5 model and supplement the manual analysis performed in the project.
 
