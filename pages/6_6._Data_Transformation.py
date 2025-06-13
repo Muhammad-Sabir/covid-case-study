@@ -19,6 +19,8 @@ from src.pipeline.visualizer import (
     plot_highest_avg_daily_deaths,
     plot_deaths_overtime,
 )
+from src.llm.prompt import format_prompt
+from src.llm.client import get_ai_insights
 
 
 confirmed_cases_raw = load_data(DATASET_DIR / "covid_19_confirmed_v1.csv")
@@ -43,7 +45,7 @@ st.markdown("**Q6.1**: Transform 'deaths' dataset from wide to long format.")
 
 long_deaths_df = transform_from_wide_to_long(deaths_cleaned, DatasetType.DEATHS)
 
-code_tab, output_tab, ai_insights_tab = st.tabs(["Code", "Results", "AI Insights"])
+code_tab, output_tab = st.tabs(["Code", "Results"])
 
 with code_tab:
     st.markdown("Source code of `transform_from_wide_to_long` function")
@@ -54,9 +56,6 @@ with output_tab:
     st.markdown("### Deaths DataFrame in Long Format")
     st.dataframe(long_deaths_df)
 
-with ai_insights_tab:
-    st.markdown("### Coming soon...")
-
 st.markdown("---")
 
 # Question 6.2
@@ -64,7 +63,7 @@ st.markdown("**Q6.2**: Total deaths per country to date.")
 
 total_deaths_per_country = get_total_deaths_per_country(long_deaths_df)
 
-code_tab, output_tab, ai_insights_tab = st.tabs(["Code", "Results", "AI Insights"])
+code_tab, output_tab = st.tabs(["Code", "Results"])
 
 with code_tab:
     st.markdown("Source code of `get_total_deaths_per_country` function")
@@ -80,15 +79,16 @@ with output_tab:
     st.dataframe(total_deaths_per_country)
     st.pyplot(plot_total_deaths_per_country(total_deaths_per_country))
 
-with ai_insights_tab:
-    st.markdown("### Coming soon...")
-
 st.markdown("---")
 
 # Question 6.3
 st.markdown("**Q6.3**: Top 5 countries by average daily deaths.")
 
 highest_avg_daily_deaths = get_highest_avg_daily_deaths(long_deaths_df, 5)
+prompt = format_prompt(
+    question="What are the top 5 countries with the highest average daily deaths?",
+    data=highest_avg_daily_deaths.to_markdown(index=False),
+)
 
 code_tab, output_tab, ai_insights_tab = st.tabs(["Code", "Results", "AI Insights"])
 
@@ -105,7 +105,8 @@ with output_tab:
     st.pyplot(plot_highest_avg_daily_deaths(highest_avg_daily_deaths))
 
 with ai_insights_tab:
-    st.markdown("### Coming soon...")
+    if st.button("Generate Insights", key="generate_insights_button_1"):
+        get_ai_insights(prompt)
 
 st.markdown("---")
 
@@ -113,6 +114,10 @@ st.markdown("---")
 st.markdown("**Q6.4**: Evolution of total deaths in the US over time.")
 
 deaths_overtime = total_deaths_overtime(long_deaths_df, "US")
+prompt = format_prompt(
+    question=" How have the total deaths evolved over time in the United States?",
+    data=deaths_overtime.to_markdown(index=False),
+)
 
 code_tab, output_tab, ai_insights_tab = st.tabs(["Code", "Results", "AI Insights"])
 
@@ -129,4 +134,5 @@ with output_tab:
     st.pyplot(plot_deaths_overtime(deaths_overtime, "US"))
 
 with ai_insights_tab:
-    st.markdown("### Coming soon...")
+    if st.button("Generate Insights", key="generate_insights_button_2"):
+        get_ai_insights(prompt)

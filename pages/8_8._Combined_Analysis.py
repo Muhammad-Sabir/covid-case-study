@@ -18,6 +18,8 @@ from src.pipeline.visualizer import (
     plot_highest_avg_death_rates,
     plot_us_monthly_recovery_ratio,
 )
+from src.llm.prompt import format_prompt
+from src.llm.client import get_ai_insights
 
 
 confirmed_cases_raw = load_data(DATASET_DIR / "covid_19_confirmed_v1.csv")
@@ -45,6 +47,10 @@ st.caption("This section performs analysis on merged data.")
 st.markdown("**Q8.1**: Countries with highest average death rates in 2020.")
 
 top_3_avg = highest_avg_death_rates_2020(merged_df, 3)
+prompt = format_prompt(
+    question="For the combined dataset, identify the three countries with the highest average death rates (deaths/confirmed cases) throughout 2020. What might this indicate about the pandemic's impact in these countries?",
+    data=top_3_avg.to_markdown(index=False),
+)
 
 code_tab, output_tab, ai_insights_tab = st.tabs(["Code", "Results", "AI Insights"])
 
@@ -61,7 +67,8 @@ with output_tab:
     st.pyplot(plot_highest_avg_death_rates(top_3_avg))
 
 with ai_insights_tab:
-    st.markdown("### Coming soon...")
+    if st.button("Generate Insights", key="generate_insights_button_1"):
+        get_ai_insights(prompt)
 
 st.markdown("---")
 
@@ -69,6 +76,10 @@ st.markdown("---")
 st.markdown("**Q8.2**: Compare total recoveries vs deaths in South Africa.")
 
 sa_ratio = recovery_death_ratio(merged_df, "South Africa")
+prompt = format_prompt(
+    question="Using the merged dataset, compare the total number of recoveries to the total number of deaths in South Africa. What can this tell us about the outcomes of COVID-19 cases in the country?",
+    data=str(sa_ratio),
+)
 
 code_tab, output_tab, ai_insights_tab = st.tabs(["Code", "Results", "AI Insights"])
 
@@ -82,7 +93,8 @@ with output_tab:
     st.code("South Africa Recoveries to Death Ratio: " + str(sa_ratio))
 
 with ai_insights_tab:
-    st.markdown("### Coming soon...")
+    if st.button("Generate Insights", key="generate_insights_button_2"):
+        get_ai_insights(prompt)
 
 st.markdown("---")
 
@@ -90,6 +102,10 @@ st.markdown("---")
 st.markdown("**Q8.3**: US recovery ratio (monthly) from Mar 2020 to May 2021.")
 
 us_ratio = highest_recovery_confirmed_ratio(merged_df, "US")
+prompt = format_prompt(
+    question="Analyze the ratio of recoveries to confirmed cases for the United States monthly from March 2020 to May 2021. Which month experienced the highest recovery ratio, and what could be the potential reasons?",
+    data=us_ratio.to_markdown(index=False),
+)
 
 code_tab, output_tab, ai_insights_tab = st.tabs(["Code", "Results", "AI Insights"])
 
@@ -106,4 +122,5 @@ with output_tab:
     st.pyplot(plot_us_monthly_recovery_ratio(us_ratio))
 
 with ai_insights_tab:
-    st.markdown("### Coming soon...")
+    if st.button("Generate Insights", key="generate_insights_button_3"):
+        get_ai_insights(prompt)

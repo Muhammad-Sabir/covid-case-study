@@ -37,7 +37,7 @@ confirmed_cases_cleaned = handle_missing_data(
 deaths_cleaned = handle_missing_data(deaths_raw, DatasetType.DEATHS)
 recovered_cleaned = handle_missing_data(recovered_raw, DatasetType.RECOVERED)
 
-code_tab, output_tab, ai_insights_tab = st.tabs(["Code", "Results", "AI Insights"])
+code_tab, output_tab = st.tabs(["Code", "Results"])
 
 with code_tab:
     st.markdown("Source code of `handle_missing_data` function")
@@ -70,5 +70,3 @@ with output_tab:
     st.markdown("### Cleaned Recovered Cases")
     st.dataframe(recovered_cleaned)
 
-with ai_insights_tab:
-    st.markdown("### Coming soon...")

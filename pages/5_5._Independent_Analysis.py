@@ -17,6 +17,8 @@ from src.pipeline.visualizer import (
     plot_recovery_rates,
     plot_death_rate_distribution,
 )
+from src.llm.prompt import format_prompt
+from src.llm.client import get_ai_insights
 
 
 confirmed_cases_raw = load_data(DATASET_DIR / "covid_19_confirmed_v1.csv")
@@ -43,6 +45,11 @@ peak_daily_cases = peak_daily_cases_by_country(
     confirmed_cases_cleaned, ["Germany", "France", "Italy"]
 )
 
+prompt = format_prompt(
+    question="Analyze the peak number of daily new cases in Germany, France, and Italy. Which country experienced the highest single-day surge, and when did it occur?",
+    data=peak_daily_cases.to_markdown(index=False),
+)
+
 code_tab, output_tab, ai_insights_tab = st.tabs(["Code", "Results", "AI Insights"])
 
 with code_tab:
@@ -58,7 +65,8 @@ with output_tab:
     st.pyplot(plot_peak_daily_cases(peak_daily_cases))
 
 with ai_insights_tab:
-    st.markdown("### Coming soon...")
+    if st.button("Generate Insights", key="generate_insights_button_1"):
+        get_ai_insights(prompt)
 
 st.markdown("---")
 
@@ -73,6 +81,10 @@ recovery_rates = compare_recovery_rate(
     country_one="Australia",
     country_two="Canada",
     date="12/31/20",
+)
+prompt = format_prompt(
+    question="Compare the recovery rates (recoveries/confirmed cases) between Canada and Australia as of December 31, 2020. Which country showed better management of the pandemic according to this metric?",
+    data=recovery_rates.to_markdown(index=False),
 )
 
 code_tab, output_tab, ai_insights_tab = st.tabs(["Code", "Results", "AI Insights"])
@@ -90,7 +102,8 @@ with output_tab:
     st.pyplot(plot_recovery_rates(recovery_rates, "12/31/20"))
 
 with ai_insights_tab:
-    st.markdown("### Coming soon...")
+    if st.button("Generate Insights", key="generate_insights_button_2"):
+        get_ai_insights(prompt)
 
 st.markdown("---")
 
@@ -102,6 +115,10 @@ death_rate_distribution = distribution_of_death_rates(
     confirmed_cases_cleaned=confirmed_cases_cleaned,
     country="Canada",
     date="5/29/21",
+)
+prompt = format_prompt(
+    question="What is the distribution of death rates (deaths/confirmed cases) among provinces in Canada? Identify the province with the highest and lowest death rate as of the latest data point.",
+    data=death_rate_distribution.to_markdown(index=False),
 )
 max_death_rate = get_extreme_death_rates(death_rate_distribution)
 
@@ -130,4 +147,5 @@ with output_tab:
     st.dataframe(max_death_rate)
 
 with ai_insights_tab:
-    st.markdown("### Coming soon...")
+    if st.button("Generate Insights", key="generate_insights_button_3"):
+        get_ai_insights(prompt)

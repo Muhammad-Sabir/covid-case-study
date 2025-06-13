@@ -18,7 +18,7 @@ confirmed_cases_raw = load_data(DATASET_DIR / "covid_19_confirmed_v1.csv")
 deaths_raw = load_data(DATASET_DIR / "covid_19_deaths_v1.csv")
 recovered_raw = load_data(DATASET_DIR / "covid_19_recovered_v1.csv")
 
-code_tab, output_tab, ai_insights_tab = st.tabs(["Code", "Results", "AI Insights"])
+code_tab, output_tab = st.tabs(["Code", "Results"])
 
 with code_tab:
     st.markdown("Source code of `load_data` function")
@@ -32,6 +32,3 @@ with output_tab:
     st.dataframe(deaths_raw)
     st.markdown("### Recovered Cases")
     st.dataframe(recovered_raw)
-
-with ai_insights_tab:
-    st.markdown("### Coming soon...")

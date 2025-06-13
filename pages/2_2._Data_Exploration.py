@@ -25,7 +25,7 @@ confirmed_info = get_dataset_info(confirmed_cases_raw)
 deaths_info = get_dataset_info(deaths_raw)
 recovered_info = get_dataset_info(recovered_raw)
 
-code_tab, output_tab, ai_insights_tab = st.tabs(["Code", "Results", "AI Insights"])
+code_tab, output_tab = st.tabs(["Code", "Results"])
 
 with code_tab:
     st.markdown("Source code of `get_dataset_info` function")
@@ -40,9 +40,6 @@ with output_tab:
     st.markdown("### Recovered Cases")
     st.code(recovered_info)
 
-with ai_insights_tab:
-    st.markdown("### Coming soon...")
-
 st.markdown("---")
 
 # Question 2.2
@@ -50,7 +47,7 @@ st.markdown("**Q2.2**: Plot confirmed cases over time for top countries.")
 
 top_countries_fig = get_top_countries_confirmed_cases_plot(confirmed_cases_raw)
 
-code_tab, output_tab, ai_insights_tab = st.tabs(["Code", "Results", "AI Insights"])
+code_tab, output_tab = st.tabs(["Code", "Results"])
 
 with code_tab:
     st.markdown("Source code of `get_top_countries_confirmed_cases_plot` function")
@@ -65,9 +62,6 @@ with output_tab:
     else:
         st.error("Failed to generate the plot.")
 
-with ai_insights_tab:
-    st.markdown("### Coming soon...")
-
 st.markdown("---")
 
 # Question 2.3
@@ -75,7 +69,7 @@ st.markdown("**Q2.3**: Plot confirmed cases over time for China.")
 
 china_confirmed_fig = get_china_countries_confirmed_cases_plot(confirmed_cases_raw)
 
-code_tab, output_tab, ai_insights_tab = st.tabs(["Code", "Results", "AI Insights"])
+code_tab, output_tab = st.tabs(["Code", "Results"])
 
 with code_tab:
     st.markdown("Source code of `get_china_countries_confirmed_cases_plot` function")
@@ -89,6 +83,3 @@ with output_tab:
         st.pyplot(china_confirmed_fig)
     else:
         st.error("Failed to generate the plot.")
-
-with ai_insights_tab:
-    st.markdown("### Coming soon...")
